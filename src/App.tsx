@@ -8,7 +8,8 @@ import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
 import FundTransferPage from "./pages/FundTransferPage";
-import PaymentGatewayPage from "./pages/PaymentGatewayPage"; // Import the new Payment Gateway page
+import PaymentGatewayPage from "./pages/PaymentGatewayPage";
+import TransactionHistoryPage from "./pages/TransactionHistoryPage"; // Import the new Transaction History page
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -30,7 +31,8 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/dashboard/transfers" element={<FundTransferPage />} />
-              <Route path="/dashboard/payments" element={<PaymentGatewayPage />} /> {/* Add route for Payment Gateway */}
+              <Route path="/dashboard/payments" element={<PaymentGatewayPage />} />
+              <Route path="/dashboard/history" element={<TransactionHistoryPage />} /> {/* Add route for Transaction History */}
               {/* Add other dashboard routes here, e.g. /dashboard/accounts, /dashboard/cards, /dashboard/investments as you build them */}
             </Route>
             
