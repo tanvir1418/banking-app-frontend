@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import SidebarNav from '@/components/dashboard/SidebarNav';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
@@ -11,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ReceiptText, Smartphone, Wifi, Shield, Search, CreditCard as CreditCardIcon, ArrowRight } from 'lucide-react'; // Visa replaced by CreditCardIcon
+import { ReceiptText, Smartphone, Wifi, Shield, Search, CreditCard as CreditCardIcon, ArrowRight } from 'lucide-react';
 
 const billCategories = [
   { name: 'Utility Bills', icon: ReceiptText, action: () => console.log('Pay Utility Bills') },
@@ -27,10 +26,10 @@ const upcomingBillsData = [
 ];
 
 const recentTransactionsData = [
-    { id: 'txn1', description: 'Pacific Gas & Electric', date: 'May 2, 2025', category: 'Utility', amount: -78.45, status: 'Completed' },
-    { id: 'txn2', description: 'Comcast Xfinity', date: 'April 28, 2025', category: 'Internet', amount: -59.99, status: 'Completed' },
-    { id: 'txn3', description: 'State Farm Insurance', date: 'April 15, 2025', category: 'Insurance', amount: -128.75, status: 'Completed' },
-    { id: 'txn4', description: 'City Water Department', date: 'April 10, 2025', category: 'Utility', amount: -42.20, status: 'Completed' },
+    { id: 'txn1', description: 'Pacific Gas & Electric', date: 'May 2, 2025', category: 'Utility', amount: -78.45, status: 'Completed', logo: '/placeholder.svg' },
+    { id: 'txn2', description: 'Comcast Xfinity', date: 'April 28, 2025', category: 'Internet', amount: -59.99, status: 'Completed', logo: '/placeholder.svg' },
+    { id: 'txn3', description: 'State Farm Insurance', date: 'April 15, 2025', category: 'Insurance', amount: -128.75, status: 'Completed', logo: '/placeholder.svg' },
+    { id: 'txn4', description: 'City Water Department', date: 'April 10, 2025', category: 'Utility', amount: -42.20, status: 'Completed', logo: '/placeholder.svg' },
 ];
 
 const checkingAccounts = [
@@ -54,7 +53,6 @@ const PaymentGatewayPage: React.FC = () => {
     }
   };
 
-
   return (
     <div className="flex min-h-screen bg-slate-50">
       <SidebarNav />
@@ -69,7 +67,6 @@ const PaymentGatewayPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Bill Payments */}
               <Card className="bg-white shadow-lg">
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-xl text-gray-800">Bill Payments</CardTitle>
@@ -89,13 +86,12 @@ const PaymentGatewayPage: React.FC = () => {
               <Card className="bg-white shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-xl text-gray-800">Upcoming Bills</CardTitle>
-                  {/* Add View All if needed */}
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {upcomingBillsData.map(bill => (
                     <div key={bill.id} className="flex items-center justify-between p-3 border rounded-md hover:bg-gray-50">
                       <div className="flex items-center">
-                        {/* <img src={bill.providerLogo} alt={bill.name} className="h-8 w-8 mr-3 rounded-full" /> */}
+                        <img src={bill.providerLogo} alt="" className="h-8 w-8 mr-3 rounded-full object-cover bg-gray-200" />
                         <div>
                           <p className="font-medium text-gray-800">{bill.name}</p>
                           <p className="text-xs text-gray-500">Due {bill.due}</p>
@@ -246,7 +242,12 @@ const PaymentGatewayPage: React.FC = () => {
                 <TableBody>
                   {recentTransactionsData.map((tx) => (
                     <TableRow key={tx.id}>
-                      <TableCell className="font-medium text-gray-800">{tx.description}</TableCell>
+                      <TableCell className="font-medium text-gray-800">
+                        <div className="flex items-center">
+                          <img src={tx.logo} alt="" className="h-7 w-7 mr-3 rounded-full object-cover bg-gray-200" />
+                          {tx.description}
+                        </div>
+                      </TableCell>
                       <TableCell className="text-gray-600">{tx.date}</TableCell>
                       <TableCell>
                         <span className={`px-2 py-0.5 text-xs rounded-full font-medium

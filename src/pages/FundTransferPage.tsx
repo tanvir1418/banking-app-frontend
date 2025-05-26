@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import SidebarNav from '@/components/dashboard/SidebarNav';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
@@ -13,7 +12,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowRight, CalendarDays, Check } from 'lucide-react'; // Added Check
+import { ArrowRight, CalendarDays, Check } from 'lucide-react';
+import { Switch } from "@/components/ui/switch"; // Import Switch
 
 // Mock data for selects and table
 const accounts = [
@@ -44,6 +44,7 @@ const FundTransferPage: React.FC = () => {
   const [saveAsTemplate, setSaveAsTemplate] = useState<boolean>(false);
 
   const selectedFromAccount = accounts.find(acc => acc.id === fromAccount);
+  const selectedToAccount = accounts.find(acc => acc.id === toAccount);
 
   const handleContinue = () => {
     if (currentStep < 3) {
@@ -80,7 +81,8 @@ const FundTransferPage: React.FC = () => {
               <TabsTrigger value="external" className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm">External Transfer</TabsTrigger>
             </TabsList>
             <TabsContent value="internal">
-              <Card className="shadow-lg mt-4 bg-white">
+              {/* Adjusted max-width here for a narrower form area */}
+              <Card className="shadow-lg mt-4 bg-white md:max-w-3xl lg:max-w-4xl mx-auto">
                 <CardHeader>
                   <div className="flex items-center w-full mb-6">
                     {[1, 2, 3].map(step => (
@@ -117,9 +119,9 @@ const FundTransferPage: React.FC = () => {
                             </SelectContent>
                           </Select>
                           {selectedFromAccount && (
-                            <div className="text-xs text-gray-500 mt-1 space-y-0.5">
-                              <p>Available Balance: ${selectedFromAccount.balance.toFixed(2)}</p>
-                              <p>Daily Transfer Limit: $25,000.00</p>
+                            <div className="bg-slate-100 border border-slate-200 rounded-md p-3 text-xs text-gray-600 mt-2 space-y-1">
+                              <div className="flex justify-between"><span>Available Balance:</span> <span className="font-medium">${selectedFromAccount.balance.toFixed(2)}</span></div>
+                              <div className="flex justify-between"><span>Daily Transfer Limit:</span> <span className="font-medium">$25,000.00</span></div>
                             </div>
                           )}
                         </div>
@@ -135,10 +137,10 @@ const FundTransferPage: React.FC = () => {
                               ))}
                             </SelectContent>
                           </Select>
-                           {accounts.find(acc => acc.id === toAccount) && (
-                             <div className="text-xs text-gray-500 mt-1 space-y-0.5">
-                                <p>Current Balance: ${accounts.find(acc => acc.id === toAccount)?.balance.toFixed(2)}</p>
-                                <p>Interest Rate: 1.25% APY</p>
+                           {selectedToAccount && (
+                             <div className="bg-slate-100 border border-slate-200 rounded-md p-3 text-xs text-gray-600 mt-2 space-y-1">
+                                <div className="flex justify-between"><span>Current Balance:</span> <span className="font-medium">${selectedToAccount.balance.toFixed(2)}</span></div>
+                                <div className="flex justify-between"><span>Interest Rate:</span> <span className="font-medium">1.25% APY</span></div>
                              </div>
                            )}
                         </div>
@@ -160,13 +162,15 @@ const FundTransferPage: React.FC = () => {
                         <Textarea id="description" placeholder="Add a note about this transfer" value={description} onChange={(e) => setDescription(e.target.value)} className="bg-white"/>
                       </div>
                       
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="recurring" checked={isRecurring} onCheckedChange={(checked) => setIsRecurring(checked as boolean)} />
-                        <Label htmlFor="recurring" className="font-normal text-gray-700">Make this a recurring transfer</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="saveTemplate" checked={saveAsTemplate} onCheckedChange={(checked) => setSaveAsTemplate(checked as boolean)} />
-                        <Label htmlFor="saveTemplate" className="font-normal text-gray-700">Save as template</Label>
+                      <div className="flex items-center space-x-4 pt-2"> {/* Changed space-x-2 to space-x-4 for more separation */}
+                        <div className="flex items-center space-x-2">
+                          <Switch id="recurring" checked={isRecurring} onCheckedChange={setIsRecurring} />
+                          <Label htmlFor="recurring" className="font-normal text-gray-700">Make this a recurring transfer</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="saveTemplate" checked={saveAsTemplate} onCheckedChange={(checked) => setSaveAsTemplate(checked as boolean)} />
+                          <Label htmlFor="saveTemplate" className="font-normal text-gray-700">Save as template</Label>
+                        </div>
                       </div>
 
                       <div className="bg-blue-50 p-4 rounded-md text-sm text-blue-800 space-y-1 border border-blue-200">
@@ -223,7 +227,7 @@ const FundTransferPage: React.FC = () => {
               </Card>
             </TabsContent>
             <TabsContent value="external">
-                <Card className="shadow-lg mt-4 bg-white">
+                <Card className="shadow-lg mt-4 bg-white md:max-w-3xl lg:max-w-4xl mx-auto">
                     <CardHeader><CardTitle className="text-gray-800">External Transfers</CardTitle></CardHeader>
                     <CardContent>
                         <p className="text-gray-600">External transfer functionality coming soon. This section will allow you to send funds to accounts outside of this bank.</p>
