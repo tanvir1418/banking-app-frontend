@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Session, User } from '@supabase/supabase-js';
+import { Session, User, AuthError } from '@supabase/supabase-js'; // Added AuthError
 // Update the import path for the Supabase client
 import { supabase } from '@/integrations/supabase/client';
 
@@ -8,7 +7,7 @@ interface AuthContextType {
   session: Session | null;
   user: User | null;
   isLoading: boolean;
-  signOut: () => Promise<void>;
+  signOut: () => Promise<AuthError | null>; // Updated return type
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -44,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const signOut = async () => {
+  const signOut = async (): Promise<AuthError | null> => {
     console.log("AuthContext: signOut called");
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -54,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
       console.log("AuthContext: signOut successful");
     }
+    return error; // Return the error object
   };
 
   const value = {

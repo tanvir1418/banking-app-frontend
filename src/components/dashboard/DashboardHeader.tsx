@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, ChevronDown, Search, UserCircle, Settings, LogOut } from 'lucide-react'; // Added Settings, LogOut
+import { Bell, ChevronDown, Search, UserCircle, Settings, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,12 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from '@/contexts/AuthContext'; // For user info and logout
-import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+// import { supabase } from '@/integrations/supabase/client'; // No longer directly needed for signOut
 import { useToast } from '@/hooks/use-toast';
 
 const DashboardHeader: React.FC = () => {
-  const { user, setUser } = useAuth();
+  const { user, signOut } = useAuth(); // Changed: use signOut from context, remove setUser
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,7 +26,7 @@ const DashboardHeader: React.FC = () => {
   const userFullName = user?.user_metadata?.full_name || user?.email;
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+    const error = await signOut(); // Call signOut from context
     if (error) {
       toast({
         title: "Logout Failed",
@@ -35,7 +34,7 @@ const DashboardHeader: React.FC = () => {
         variant: "destructive",
       });
     } else {
-      setUser(null); // Clear user in AuthContext
+      // setUser(null) is handled by AuthContext's signOut
       navigate('/auth'); // Redirect to login page
       toast({
         title: "Logged Out",
