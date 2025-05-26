@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import SidebarNav from '@/components/dashboard/SidebarNav';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import DashboardFooter from '@/components/dashboard/DashboardFooter';
-import { ReceiptText, Smartphone, Wifi, Shield, Zap, Droplets, LucideIcon } from 'lucide-react'; // Added Zap, Droplets, LucideIcon
+import { ReceiptText, Smartphone, Wifi, Shield, Zap, Droplets, LucideIcon } from 'lucide-react';
 
 // New component imports
 import BillCategoriesGrid from '@/components/payment-gateway/BillCategoriesGrid';
@@ -21,16 +21,16 @@ const billCategories = [
 ];
 
 const upcomingBillsData = [
-  { id: 'bill1', name: 'Electricity Bill', due: 'in 3 days', amount: 78.45, icon: Zap, providerLogo: '/placeholder.svg' }, // Added icon
-  { id: 'bill2', name: 'Water Bill', due: 'Next week', amount: 42.20, icon: Droplets, providerLogo: '/placeholder.svg' }, // Added icon
-  { id: 'bill3', name: 'Internet Bill', due: 'in 10 days', amount: 59.99, icon: Wifi, providerLogo: '/placeholder.svg' }, // Added icon
+  { id: 'bill1', name: 'Electricity Bill', due: 'in 3 days', amount: 78.45, icon: Zap, providerLogo: '/placeholder.svg', category: 'Utility' },
+  { id: 'bill2', name: 'Water Bill', due: 'Next week', amount: 42.20, icon: Droplets, providerLogo: '/placeholder.svg', category: 'Utility' },
+  { id: 'bill3', name: 'Internet Bill', due: 'in 10 days', amount: 59.99, icon: Wifi, providerLogo: '/placeholder.svg', category: 'Internet' },
 ];
 
 const recentTransactionsData = [
-    { id: 'txn1', description: 'Pacific Gas & Electric', date: 'May 2, 2025', category: 'Utility', amount: -78.45, status: 'Completed', icon: Zap, logo: '/placeholder.svg' }, // Added icon
-    { id: 'txn2', description: 'Comcast Xfinity', date: 'April 28, 2025', category: 'Internet', amount: -59.99, status: 'Completed', icon: Wifi, logo: '/placeholder.svg' }, // Added icon
-    { id: 'txn3', description: 'State Farm Insurance', date: 'April 15, 2025', category: 'Insurance', amount: -128.75, status: 'Completed', icon: Shield, logo: '/placeholder.svg' }, // Added a new transaction with icon
-    { id: 'txn4', description: 'City Water Department', date: 'April 10, 2025', category: 'Utility', amount: -42.20, status: 'Completed', icon: Droplets, logo: '/placeholder.svg' }, // Added a new transaction with icon
+    { id: 'txn1', description: 'Pacific Gas & Electric', date: 'May 2, 2025', category: 'Utility', amount: -78.45, status: 'Completed', icon: Zap, logo: '/placeholder.svg' },
+    { id: 'txn2', description: 'Comcast Xfinity', date: 'April 28, 2025', category: 'Internet', amount: -59.99, status: 'Completed', icon: Wifi, logo: '/placeholder.svg' },
+    { id: 'txn3', description: 'State Farm Insurance', date: 'April 15, 2025', category: 'Insurance', amount: -128.75, status: 'Completed', icon: Shield, logo: '/placeholder.svg' },
+    { id: 'txn4', description: 'City Water Department', date: 'April 10, 2025', category: 'Utility', amount: -42.20, status: 'Completed', icon: Droplets, logo: '/placeholder.svg' },
 ];
 
 const checkingAccounts = [
