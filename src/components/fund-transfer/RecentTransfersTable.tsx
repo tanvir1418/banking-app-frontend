@@ -2,7 +2,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card'; // Removed CardHeader, CardTitle, CardDescription
 
 interface TransferData {
   date: string;
@@ -20,26 +20,26 @@ interface RecentTransfersTableProps {
 const RecentTransfersTable: React.FC<RecentTransfersTableProps> = ({ transfers }) => {
   return (
     <Card className="shadow-lg bg-white mt-8">
-      <CardHeader>
-        <CardTitle className="text-xl text-gray-800">Recent Transfers</CardTitle> {/* Adjusted text size */}
-        <CardDescription className="text-sm text-gray-500">Overview of your recent internal fund movements.</CardDescription> {/* Adjusted text size */}
-      </CardHeader>
-      <CardContent>
+      <div className="p-6 pb-4"> {/* Title container */}
+        <h2 className="text-xl font-semibold text-gray-800">Recent Transfers</h2>
+        {/* Removed CardDescription */}
+      </div>
+      <CardContent className="pt-0"> {/* Removed padding top from card content as it's handled by title container */}
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="text-gray-600">Date</TableHead>
-              <TableHead className="text-gray-600">From</TableHead>
-              <TableHead className="text-gray-600">To</TableHead>
-              <TableHead className="text-gray-600">Amount</TableHead>
-              <TableHead className="text-gray-600 text-center">Status</TableHead> {/* Centered status */}
-              <TableHead className="text-gray-600 text-right">Action</TableHead> {/* Right-aligned action */}
+            <TableRow className="bg-blue-600 hover:bg-blue-700"> {/* Blue background for header row */}
+              <TableHead className="text-white font-semibold">Date</TableHead> {/* White text */}
+              <TableHead className="text-white font-semibold">From</TableHead>
+              <TableHead className="text-white font-semibold">To</TableHead>
+              <TableHead className="text-white font-semibold">Amount</TableHead>
+              <TableHead className="text-white font-semibold text-center">Status</TableHead>
+              <TableHead className="text-white font-semibold text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {transfers.map((transfer, index) => (
-              <TableRow key={index}>
-                <TableCell className="text-gray-700 text-sm">{transfer.date}</TableCell> {/* Adjusted text size */}
+              <TableRow key={index} className="border-b hover:bg-gray-50"> {/* Added border-b */}
+                <TableCell className="text-gray-700 text-sm">{transfer.date}</TableCell>
                 <TableCell className="text-gray-700 text-sm">{transfer.from}</TableCell>
                 <TableCell className="text-gray-700 text-sm">{transfer.to}</TableCell>
                 <TableCell className="text-gray-700 font-medium text-sm">{transfer.amount}</TableCell>
@@ -49,7 +49,7 @@ const RecentTransfersTable: React.FC<RecentTransfersTableProps> = ({ transfers }
                   </span>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-700 text-xs">{transfer.action}</Button>
+                  <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-700 text-xs hover:underline">{transfer.action}</Button>
                 </TableCell>
               </TableRow>
             ))}
