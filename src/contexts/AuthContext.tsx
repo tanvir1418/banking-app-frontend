@@ -1,7 +1,8 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabaseClient';
+// Update the import path for the Supabase client
+import { supabase } from '@/integrations/supabase/client';
 
 interface AuthContextType {
   session: Session | null;
@@ -23,10 +24,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
+      console.log("AuthContext: getSession completed", session);
+    }).catch(error => {
+      console.error("AuthContext: error in getSession", error);
+      setIsLoading(false);
     });
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
+        console.log("AuthContext: onAuthStateChange triggered", _event, session);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
@@ -39,9 +45,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setSession(null);
-    setUser(null);
+    console.log("AuthContext: signOut called");
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("AuthContext: error signing out", error);
+    } else {
+      setSession(null);
+      setUser(null);
+      console.log("AuthContext: signOut successful");
+    }
   };
 
   const value = {
