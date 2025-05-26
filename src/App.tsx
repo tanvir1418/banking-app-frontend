@@ -7,7 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
-import FundTransferPage from "./pages/FundTransferPage"; // Import the new page
+import FundTransferPage from "./pages/FundTransferPage";
+import PaymentGatewayPage from "./pages/PaymentGatewayPage"; // Import the new Payment Gateway page
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -28,8 +29,9 @@ const App = () => (
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/dashboard/transfers" element={<FundTransferPage />} /> {/* Add route for Fund Transfers */}
-              {/* Add other dashboard routes here, e.g. /dashboard/accounts, /dashboard/payments, /dashboard/cards, /dashboard/investments as you build them */}
+              <Route path="/dashboard/transfers" element={<FundTransferPage />} />
+              <Route path="/dashboard/payments" element={<PaymentGatewayPage />} /> {/* Add route for Payment Gateway */}
+              {/* Add other dashboard routes here, e.g. /dashboard/accounts, /dashboard/cards, /dashboard/investments as you build them */}
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
