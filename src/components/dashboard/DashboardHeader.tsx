@@ -1,9 +1,8 @@
 
-import React, { useState } from 'react';
+import React from 'react'; // Removed useState as searchQuery is gone
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, ChevronDown, Search, UserCircle, Settings, LogOut, CreditCard, Repeat, Briefcase } from 'lucide-react'; // Added CreditCard, Repeat, Briefcase
+import { Bell, ChevronDown, UserCircle, Settings, LogOut } from 'lucide-react'; // Removed unused CreditCard, Repeat, Briefcase, Search
 import { Button } from '@/components/ui/button';
-// import { Input } from '@/components/ui/input'; // Input no longer needed here
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -24,18 +23,17 @@ import {
 } from "@/components/ui/navigation-menu";
 
 const headerNavItems = [
-  { name: 'Accounts', path: '/dashboard/accounts' }, // Assuming this path, adjust if needed
+  { name: 'Accounts', path: '/dashboard/accounts' },
   { name: 'Transfers', path: '/dashboard/transfers' },
-  { name: 'Payments', path: '/dashboard/payments' }, // Assuming this path, adjust if needed
-  { name: 'Cards', path: '/dashboard/cards' }, // New item
-  { name: 'Investments', path: '/dashboard/investments' }, // New item
+  { name: 'Payments', path: '/dashboard/payments' },
+  { name: 'Cards', path: '/dashboard/cards' },
+  { name: 'Investments', path: '/dashboard/investments' },
 ];
 
 const DashboardHeader: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  // const [searchQuery, setSearchQuery] = useState(''); // Search query no longer needed
 
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : 'U';
   const userFullName = user?.user_metadata?.full_name || user?.email;
@@ -56,16 +54,9 @@ const DashboardHeader: React.FC = () => {
       });
     }
   };
-  
-  // const handleSearch = (e: React.FormEvent) => { // Search handler no longer needed
-  //   e.preventDefault();
-  //   if (searchQuery.trim()) {
-  //     toast({ title: "Search", description: `Searching for: ${searchQuery}`});
-  //   }
-  // };
 
   return (
-    <header className="bg-white border-b border-gray-200 p-4 sticky top-0 z-40">
+    <header className="bg-background border-b border-border p-4 sticky top-0 z-40">
       <div className="container mx-auto flex items-center justify-between">
         {/* Navigation Links - aligned to the left */}
         <NavigationMenu>
@@ -84,7 +75,7 @@ const DashboardHeader: React.FC = () => {
 
         {/* Right Aligned Icons & User Dropdown */}
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700">
+          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
             <Bell className="h-6 w-6" />
             <span className="sr-only">Notifications</span>
           </Button>
@@ -96,11 +87,11 @@ const DashboardHeader: React.FC = () => {
                   <AvatarImage src={user?.user_metadata?.avatar_url} alt={userFullName ?? undefined} />
                   <AvatarFallback>{userInitial}</AvatarFallback>
                 </Avatar>
-                <span className="hidden md:inline text-sm font-medium text-gray-700">{userFullName}</span>
-                <ChevronDown className="h-4 w-4 text-gray-500" />
+                <span className="hidden md:inline text-sm font-medium text-foreground">{userFullName}</span>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-white shadow-lg rounded-md border z-50"> {/* Ensured background and z-index */}
+            <DropdownMenuContent align="end" className="w-56 bg-popover text-popover-foreground shadow-lg rounded-md border border-border z-50">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={() => navigate('/dashboard/profile')}>
@@ -112,7 +103,7 @@ const DashboardHeader: React.FC = () => {
                 <span>Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={handleLogout}>
+              <DropdownMenuItem onSelect={handleLogout} className="focus:bg-destructive/80 focus:text-destructive-foreground">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>

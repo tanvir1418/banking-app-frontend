@@ -5,11 +5,12 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Target, TrendingUp, PlusCircle } from 'lucide-react';
 
+// Removed color from budgets data, Progress component will use primary theme color.
 const budgets = [
-  { name: 'Groceries', spent: 250, total: 400, color: 'bg-green-500' }, // Progress component uses primary color by default, specific color per budget might need custom styling or component changes.
-  { name: 'Dining Out', spent: 150, total: 200, color: 'bg-blue-500' },
-  { name: 'Shopping', spent: 300, total: 300, color: 'bg-purple-500' },
-  { name: 'Travel', spent: 50, total: 500, color: 'bg-orange-500' },
+  { name: 'Groceries', spent: 250, total: 400 },
+  { name: 'Dining Out', spent: 150, total: 200 },
+  { name: 'Shopping', spent: 300, total: 300 },
+  { name: 'Travel', spent: 50, total: 500 },
 ];
 
 const BudgetTracker: React.FC = () => {
@@ -30,23 +31,21 @@ const BudgetTracker: React.FC = () => {
         {budgets.map(budget => (
           <div key={budget.name}>
             <div className="flex justify-between items-center mb-1">
-              <span className="text-sm font-medium text-card-foreground">{budget.name}</span> {/* text-gray-700 to text-card-foreground */}
-              <span className="text-sm text-muted-foreground">${budget.spent} / ${budget.total}</span> {/* text-gray-500 to text-muted-foreground */}
+              <span className="text-sm font-medium text-card-foreground">{budget.name}</span>
+              <span className="text-sm text-muted-foreground">${budget.spent} / ${budget.total}</span>
             </div>
             <Progress 
               value={(budget.spent / budget.total) * 100} 
-              className="h-3" 
-              // To apply budget.color to the indicator, we'd need to ensure Progress supports it or use CSS custom properties.
-              // For now, it will use the primary theme color. If budget.color should be used, a style attribute with CSS variable could work.
-              // style={{ '--progress-indicator-color': `hsl(var(--${budget.color.replace('bg-', '')}))` }} // This is an example if Progress supported it
+              className="h-3"
+              // The Progress component from shadcn/ui should use the primary color from the theme.
             />
           </div>
         ))}
         <div className="mt-6 text-center">
-            <Button variant="ghost" className="text-primary hover:text-primary/90"> {/* Ensure ghost buttons use themeable colors */}
+            <Button variant="ghost" className="text-primary hover:text-primary/90">
                 <Target className="mr-2 h-4 w-4" /> Set New Goals
             </Button>
-            <Button variant="ghost" className="text-green-600 dark:text-green-500 hover:text-green-700 dark:hover:text-green-400 ml-4"> {/* Example for specific color */}
+            <Button variant="ghost" className="text-green-600 dark:text-green-500 hover:text-green-700 dark:hover:text-green-400 ml-4">
                 <TrendingUp className="mr-2 h-4 w-4" /> View Spending Trends
             </Button>
         </div>

@@ -9,14 +9,14 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import SpendingAnalysis from '@/components/dashboard/SpendingAnalysis';
 import BudgetTracker from '@/components/dashboard/BudgetTracker';
 import UpcomingPayments from '@/components/dashboard/UpcomingPayments';
-import { useAuth } from '@/contexts/AuthContext'; // For greeting
-import { Button } from '@/components/ui/button'; // Added Button import
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react'; // Added for button icon
 
 const DashboardPage = () => {
   const { user } = useAuth();
   const firstName = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'User';
 
-  // Get current time for greeting
   const currentTime = new Date();
   const currentHour = currentTime.getHours();
   let greeting = "Good morning";
@@ -26,25 +26,26 @@ const DashboardPage = () => {
     greeting = "Good evening";
   }
   
+  const lastLoginDateRaw = user?.last_sign_in_at ? new Date(user.last_sign_in_at) : currentTime;
   const lastLoginDate = new Intl.DateTimeFormat('en-US', { 
     year: 'numeric', month: 'long', day: 'numeric' 
-  }).format(user?.last_sign_in_at ? new Date(user.last_sign_in_at) : currentTime);
+  }).format(lastLoginDateRaw);
   const lastLoginTime = new Intl.DateTimeFormat('en-US', { 
     hour: 'numeric', minute: 'numeric', hour12: true 
-  }).format(user?.last_sign_in_at ? new Date(user.last_sign_in_at) : currentTime);
+  }).format(lastLoginDateRaw);
 
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-background">
       <SidebarNav />
       <div className="flex-1 flex flex-col">
         <DashboardHeader />
         <main className="flex-1 p-6 md:p-8 overflow-y-auto space-y-8">
           {/* Greeting Section */}
           <section>
-            <h1 className="text-3xl font-semibold text-gray-800">{greeting}, {firstName}!</h1>
-            <p className="text-sm text-gray-500">
-              {lastLoginDate} | Last login: {user?.last_sign_in_at ? lastLoginTime : `Today, ${lastLoginTime}`}
+            <h1 className="text-3xl font-semibold text-foreground">{greeting}, {firstName}!</h1>
+            <p className="text-sm text-muted-foreground">
+              {user?.last_sign_in_at ? `Last login: ${lastLoginDate} at ${lastLoginTime}` : `Welcome! Today is ${lastLoginDate}`}
             </p>
           </section>
 
@@ -53,8 +54,8 @@ const DashboardPage = () => {
           
           {/* New Transaction Button */}
           <div className="flex justify-end">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                + New Transaction
+            <Button variant="default"> {/* Use default themed button */}
+                <PlusCircle className="mr-2 h-4 w-4" /> New Transaction
             </Button>
           </div>
 
