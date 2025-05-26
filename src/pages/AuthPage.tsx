@@ -2,16 +2,16 @@
 import React, { useState } from 'react';
 import LoginForm from '@/components/auth/LoginForm';
 import RegistrationForm from '@/components/auth/RegistrationForm';
-import { Button } from '@/components/ui/button'; // For header/footer links if needed
+import { Button } from '@/components/ui/button';
 
 const AuthPage = () => {
   const [isLoginView, setIsLoginView] = useState(true);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 to-blue-800 text-white">
       {/* Header */}
       <header className="p-4 sm:p-6 flex justify-between items-center">
-        <div className="text-2xl font-bold">logo</div>
+        <div className="text-3xl font-bold">banking</div> {/* Updated logo to match dashboard */}
         <div className="flex items-center space-x-4">
           {/* TODO: Implement English dropdown */}
           <Button variant="ghost" className="text-white hover:bg-white/10">English</Button>
@@ -31,7 +31,7 @@ const AuthPage = () => {
       {/* Footer */}
       <footer className="p-4 sm:p-6 text-xs text-white/80">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <span>© 2025 logo. All rights reserved.</span>
+          <span>© 2025 banking. All rights reserved.</span> {/* Updated app name */}
           <div className="flex space-x-4 mt-2 sm:mt-0">
             <Button variant="link" className="text-white/80 hover:text-white p-0 h-auto">Privacy Policy</Button>
             <Button variant="link" className="text-white/80 hover:text-white p-0 h-auto">Terms of Service</Button>
