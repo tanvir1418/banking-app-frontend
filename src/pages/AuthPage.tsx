@@ -9,15 +9,15 @@ const AuthPage = () => {
   const [isLoginView, setIsLoginView] = useState(true);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground"> {/* Changed gradient to bg-background and text-foreground */}
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-sky-100 via-blue-200 to-indigo-300 dark:from-sky-800 dark:via-blue-900 dark:to-indigo-950 text-foreground">
       {/* Header */}
-      <header className="p-4 sm:p-6 flex justify-between items-center">
-        <div className="text-3xl font-bold">logo</div> {/* text-white to text-foreground implicitly */}
+      <header className="p-4 sm:p-6 flex justify-between items-center bg-background/80 dark:bg-background/70 backdrop-blur-md shadow-sm sticky top-0 z-10">
+        <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">logo</div>
         <div className="flex items-center space-x-2 sm:space-x-4">
-          <Button variant="ghost" className="text-foreground hover:bg-accent flex items-center"> {/* text-white to text-foreground */}
+          <Button variant="ghost" className="text-foreground hover:bg-accent flex items-center">
             English <ChevronDown className="ml-1 h-4 w-4" />
           </Button>
-          <Button variant="ghost" className="text-foreground hover:bg-accent">Help</Button> {/* text-white to text-foreground */}
+          <Button variant="ghost" className="text-foreground hover:bg-accent">Help</Button>
         </div>
       </header>
 
@@ -31,14 +31,14 @@ const AuthPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted p-4 sm:p-6 text-xs text-muted-foreground"> {/* bg-slate-900 to bg-muted, text-gray-300 to text-muted-foreground */}
+      <footer className="bg-background/80 dark:bg-background/70 backdrop-blur-md p-4 sm:p-6 text-xs text-muted-foreground shadow-sm">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
           <span>© 2025 logo. All rights reserved.</span>
           <div className="flex space-x-3 sm:space-x-4 mt-2 sm:mt-0">
-            <Button variant="link" className="text-muted-foreground hover:text-foreground p-0 h-auto text-xs">Privacy Policy</Button>
-            <Button variant="link" className="text-muted-foreground hover:text-foreground p-0 h-auto text-xs">Terms of Service</Button>
-            <Button variant="link" className="text-muted-foreground hover:text-foreground p-0 h-auto text-xs">Security</Button>
-            <Button variant="link" className="text-muted-foreground hover:text-foreground p-0 h-auto text-xs">Contact</Button>
+            <Button variant="link" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-0 h-auto text-xs">Privacy Policy</Button>
+            <Button variant="link" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-0 h-auto text-xs">Terms of Service</Button>
+            <Button variant="link" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-0 h-auto text-xs">Security</Button>
+            <Button variant="link" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-0 h-auto text-xs">Contact</Button>
           </div>
         </div>
       </footer>

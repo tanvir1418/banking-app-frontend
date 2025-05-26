@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Fingerprint, Smartphone, ShieldCheck, User, Lock } from 'lucide-react'; // Added User and Lock
+import { Eye, EyeOff, Fingerprint, Smartphone, ShieldCheck, User, Lock } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -70,10 +70,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
   };
 
   return (
-    <Card className="w-full max-w-md bg-white shadow-xl"> {/* Ensured bg-white for contrast, added shadow */}
+    <Card className="w-full max-w-md bg-card text-card-foreground shadow-xl dark:shadow-2xl rounded-lg">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold text-gray-800">Welcome Back</CardTitle> {/* Explicit text color */}
-        <CardDescription className="text-gray-600">Sign in to access your account</CardDescription> {/* Explicit text color */}
+        <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+        <CardDescription className="text-muted-foreground">Sign in to access your account</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -83,14 +83,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700">Email or Username</FormLabel>
+                  <FormLabel className="text-muted-foreground">Email or Username</FormLabel>
                   <FormControl>
                     <div className="relative flex items-center">
-                      <User className="absolute left-3 h-5 w-5 text-gray-400" />
+                      <User className="absolute left-3 h-5 w-5 text-muted-foreground" />
                       <Input 
                         placeholder="Enter your email or username" 
                         {...field} 
-                        className="pl-10 text-gray-900 placeholder-gray-500" // Added padding for icon and text color
+                        className="pl-10 bg-background text-card-foreground placeholder:text-muted-foreground"
                       />
                     </div>
                   </FormControl>
@@ -104,25 +104,25 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex justify-between items-center">
-                    <FormLabel className="text-gray-700">Password</FormLabel>
-                    <Button variant="link" type="button" className="p-0 h-auto text-sm text-blue-600 hover:text-blue-700" onClick={() => {/* TODO: Forgot password */}}>
+                    <FormLabel className="text-muted-foreground">Password</FormLabel>
+                    <Button variant="link" type="button" className="p-0 h-auto text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                       Forgot password?
                     </Button>
                   </div>
                   <FormControl>
                     <div className="relative flex items-center">
-                      <Lock className="absolute left-3 h-5 w-5 text-gray-400" />
+                      <Lock className="absolute left-3 h-5 w-5 text-muted-foreground" />
                       <Input 
                         type={showPassword ? 'text' : 'password'} 
                         placeholder="Enter your password" 
                         {...field} 
-                        className="pl-10 text-gray-900 placeholder-gray-500" // Added padding for icon and text color
+                        className="pl-10 bg-background text-card-foreground placeholder:text-muted-foreground"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:text-gray-700"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-accent-foreground"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -142,40 +142,40 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} id="rememberMe"/>
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel htmlFor="rememberMe" className="text-gray-700">Remember me for 30 days</FormLabel>
+                    <FormLabel htmlFor="rememberMe" className="text-muted-foreground">Remember me for 30 days</FormLabel>
                   </div>
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={loading}> {/* Adjusted button color */}
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600" disabled={loading}>
               {loading ? 'Signing In...' : 'Sign In'}
             </Button>
           </form>
         </Form>
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-gray-300" /> {/* Adjusted border color */}
+            <span className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-gray-500">or continue with</span> {/* Ensured bg-white and text color */}
+            <span className="bg-card px-2 text-muted-foreground">or continue with</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700" disabled={loading}> {/* Adjusted outline button colors */}
+          <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-100 hover:text-blue-700 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/50 dark:hover:text-blue-300" disabled={loading}>
             <Fingerprint className="mr-2 h-4 w-4" /> Fingerprint
           </Button>
-          <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700" disabled={loading}> {/* Adjusted outline button colors */}
+          <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-100 hover:text-blue-700 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-900/50 dark:hover:text-blue-300" disabled={loading}>
             <Smartphone className="mr-2 h-4 w-4" /> Mobile App
           </Button>
         </div>
-        <p className="mt-6 text-center text-sm text-gray-500"> {/* Adjusted text color */}
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           Don't have an account?{' '}
-          <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-700" onClick={onSwitchToRegister} disabled={loading}>
+          <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" onClick={onSwitchToRegister} disabled={loading}>
             Create account
           </Button>
         </p>
-        <div className="mt-6 flex items-center justify-center text-xs text-gray-500"> {/* Adjusted text color */}
-          <ShieldCheck className="mr-2 h-4 w-4 text-green-500" />
+        <div className="mt-6 flex items-center justify-center text-xs text-muted-foreground">
+          <ShieldCheck className="mr-2 h-4 w-4 text-green-500 dark:text-green-400" />
           <span>Secured by 256-bit encryption. We protect your financial data.</span>
         </div>
       </CardContent>

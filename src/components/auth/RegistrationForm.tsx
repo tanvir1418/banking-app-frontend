@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label'; // Label might not be needed if using FormLabel
+// Label import might not be needed if using FormLabel
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { supabase } from '@/integrations/supabase/client';
@@ -86,10 +86,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSwitchToLogin }) 
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md bg-card text-card-foreground shadow-xl dark:shadow-2xl rounded-lg">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-        <CardDescription>Join us by creating your account</CardDescription>
+        <CardDescription className="text-muted-foreground">Join us by creating your account</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -99,9 +99,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSwitchToLogin }) 
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-muted-foreground">Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input placeholder="Enter your email" {...field} className="bg-background text-card-foreground placeholder:text-muted-foreground" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -112,15 +112,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSwitchToLogin }) 
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-muted-foreground">Password</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input type={showPassword ? 'text' : 'password'} placeholder="Enter your password" {...field} />
+                      <Input type={showPassword ? 'text' : 'password'} placeholder="Enter your password" {...field} className="bg-background text-card-foreground placeholder:text-muted-foreground" />
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-accent-foreground"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -136,15 +136,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSwitchToLogin }) 
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel className="text-muted-foreground">Confirm Password</FormLabel>
                   <FormControl>
                   <div className="relative">
-                    <Input type={showConfirmPassword ? 'text' : 'password'} placeholder="Confirm your password" {...field} />
+                    <Input type={showConfirmPassword ? 'text' : 'password'} placeholder="Confirm your password" {...field} className="bg-background text-card-foreground placeholder:text-muted-foreground" />
                     <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-accent-foreground"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       >
                         {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -155,14 +155,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSwitchToLogin }) 
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600" disabled={loading}>
               {loading ? 'Creating Account...' : 'Create Account'}
             </Button>
           </form>
         </Form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{' '}
-          <Button variant="link" className="p-0 h-auto" onClick={onSwitchToLogin} disabled={loading}>
+          <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" onClick={onSwitchToLogin} disabled={loading}>
             Sign In
           </Button>
         </p>
