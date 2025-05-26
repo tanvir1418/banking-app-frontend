@@ -10,7 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const ProfileSettingsCard: React.FC = () => {
-  const { user, session } = useAuth();
+  const { user } = useAuth(); // Removed session as it's not directly used
   const { toast } = useToast();
 
   const [fullName, setFullName] = useState('');
@@ -29,7 +29,7 @@ const ProfileSettingsCard: React.FC = () => {
   const handleUpdateProfile = async () => {
     if (!user) return;
 
-    const { data, error } = await supabase.auth.updateUser({
+    const { error } = await supabase.auth.updateUser({ // data variable removed as it's not used
       data: { full_name: fullName, phone, address },
     });
 
@@ -44,56 +44,58 @@ const ProfileSettingsCard: React.FC = () => {
         title: 'Profile Updated',
         description: 'Your profile information has been successfully updated.',
       });
-      // Manually update user context if needed or rely on onAuthStateChange to refresh
-      // For immediate UI update, you might want to update user in AuthContext or re-fetch
       setIsEditing(false); 
     }
   };
 
+  const displayValue = (value: string | undefined, metadataValue: string | undefined, placeholder: string = 'N/A') => {
+    return value || metadataValue || placeholder;
+  }
+
   return (
-    <Card className="bg-white shadow-md rounded-lg">
-      <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
+    <Card className="bg-card shadow-md rounded-lg">
+      <CardHeader className="flex flex-row items-center justify-between p-6">
         <div className="flex items-center space-x-3">
-          <UserCog className="h-6 w-6 text-blue-600" />
-          <CardTitle className="text-lg font-semibold text-gray-700">Profile Settings</CardTitle>
+          <UserCog className="h-6 w-6 text-primary" />
+          <CardTitle className="text-lg font-semibold text-card-foreground">Profile Settings</CardTitle>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setIsEditing(!isEditing)}>
-          <Edit3 className="h-5 w-5 text-gray-500 hover:text-blue-600" />
+        <Button variant="ghost" size="icon" onClick={() => setIsEditing(!isEditing)} aria-label={isEditing ? 'Cancel editing' : 'Edit profile'}>
+          <Edit3 className="h-5 w-5 text-muted-foreground hover:text-primary" />
         </Button>
       </CardHeader>
-      <CardContent className="p-4 space-y-4">
+      <CardContent className="p-6 space-y-4">
         <div>
-          <Label htmlFor="fullName" className="text-sm font-medium text-gray-600">Full Name</Label>
+          <Label htmlFor="fullName" className="text-sm font-medium text-muted-foreground">Full Name</Label>
           {isEditing ? (
-            <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1 bg-white" />
+            <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1 bg-input text-foreground border-border" />
           ) : (
-            <p className="text-gray-800 mt-1">{fullName || user?.user_metadata?.full_name || 'N/A'}</p>
+            <p className="text-card-foreground mt-1 text-sm">{displayValue(fullName, user?.user_metadata?.full_name)}</p>
           )}
         </div>
         <div>
-          <Label htmlFor="email" className="text-sm font-medium text-gray-600">Email</Label>
-          <p className="text-gray-800 mt-1">{user?.email || 'N/A'}</p>
+          <Label htmlFor="email" className="text-sm font-medium text-muted-foreground">Email</Label>
+          <p className="text-card-foreground mt-1 text-sm">{user?.email || 'N/A'}</p>
         </div>
         <div>
-          <Label htmlFor="phone" className="text-sm font-medium text-gray-600">Phone</Label>
+          <Label htmlFor="phone" className="text-sm font-medium text-muted-foreground">Phone</Label>
            {isEditing ? (
-            <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 bg-white" />
+            <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 bg-input text-foreground border-border" />
           ) : (
-            <p className="text-gray-800 mt-1">{phone || user?.user_metadata?.phone || 'N/A'}</p>
+            <p className="text-card-foreground mt-1 text-sm">{displayValue(phone, user?.user_metadata?.phone)}</p>
           )}
         </div>
         <div>
-          <Label htmlFor="address" className="text-sm font-medium text-gray-600">Address</Label>
+          <Label htmlFor="address" className="text-sm font-medium text-muted-foreground">Address</Label>
            {isEditing ? (
-            <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1 bg-white" />
+            <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1 bg-input text-foreground border-border" />
           ) : (
-            <p className="text-gray-800 mt-1">{address || user?.user_metadata?.address || 'N/A'}</p>
+            <p className="text-card-foreground mt-1 text-sm">{displayValue(address, user?.user_metadata?.address)}</p>
           )}
         </div>
       </CardContent>
       {isEditing && (
-        <CardFooter className="p-4 border-t">
-          <Button onClick={handleUpdateProfile} className="w-full bg-blue-600 hover:bg-blue-700">Update Profile</Button>
+        <CardFooter className="p-6 border-t border-border">
+          <Button onClick={handleUpdateProfile} className="w-full">Update Profile</Button>
         </CardFooter>
       )}
     </Card>
@@ -101,4 +103,3 @@ const ProfileSettingsCard: React.FC = () => {
 };
 
 export default ProfileSettingsCard;
-
