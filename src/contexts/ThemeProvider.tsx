@@ -7,10 +7,11 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }
 
-export const useTheme = () = > {
+export const useTheme = () => { // Corrected '() = >' to '() =>'
   const context = useNextTheme();
   if (context === undefined) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 };
+
