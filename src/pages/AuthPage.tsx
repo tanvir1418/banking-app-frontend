@@ -8,7 +8,7 @@ const AuthPage = () => {
   const [isLoginView, setIsLoginView] = useState(true);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-400 to-blue-600 text-white"> {/* Lighter gradient */}
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-sky-300 to-sky-500 text-white"> {/* Lighter gradient */}
       {/* Header */}
       <header className="p-4 sm:p-6 flex justify-between items-center">
         <div className="text-3xl font-bold">banking</div> {/* Logo */}
