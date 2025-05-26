@@ -10,6 +10,7 @@ import SpendingAnalysis from '@/components/dashboard/SpendingAnalysis';
 import BudgetTracker from '@/components/dashboard/BudgetTracker';
 import UpcomingPayments from '@/components/dashboard/UpcomingPayments';
 import { useAuth } from '@/contexts/AuthContext'; // For greeting
+import { Button } from '@/components/ui/button'; // Added Button import
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -27,10 +28,10 @@ const DashboardPage = () => {
   
   const lastLoginDate = new Intl.DateTimeFormat('en-US', { 
     year: 'numeric', month: 'long', day: 'numeric' 
-  }).format(currentTime); // Placeholder for actual last login
+  }).format(user?.last_sign_in_at ? new Date(user.last_sign_in_at) : currentTime);
   const lastLoginTime = new Intl.DateTimeFormat('en-US', { 
     hour: 'numeric', minute: 'numeric', hour12: true 
-  }).format(currentTime); // Placeholder
+  }).format(user?.last_sign_in_at ? new Date(user.last_sign_in_at) : currentTime);
 
 
   return (
@@ -41,9 +42,9 @@ const DashboardPage = () => {
         <main className="flex-1 p-6 md:p-8 overflow-y-auto space-y-8">
           {/* Greeting Section */}
           <section>
-            <h1 className="text-3xl font-semibold text-gray-800">{greeting}, {firstName}</h1>
+            <h1 className="text-3xl font-semibold text-gray-800">{greeting}, {firstName}!</h1>
             <p className="text-sm text-gray-500">
-              {lastLoginDate} | Last login: Today, {lastLoginTime} {/* Placeholder */}
+              {lastLoginDate} | Last login: {user?.last_sign_in_at ? lastLoginTime : `Today, ${lastLoginTime}`}
             </p>
           </section>
 
