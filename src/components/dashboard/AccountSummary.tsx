@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'; // CardDescription is not used here.
 import { Button } from '@/components/ui/button';
-import { BarChart3, AlertTriangle } from 'lucide-react'; // Example icons
+import { BarChart3, AlertTriangle } from 'lucide-react';
 
 interface AccountCardProps {
   title: string;
@@ -18,14 +18,14 @@ const AccountSummaryCard: React.FC<AccountCardProps> = ({ title, accountNumberSu
   return (
     <Card className="shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
-        <BarChart3 className="h-5 w-5 text-muted-foreground" /> {/* Placeholder icon */}
+        <CardTitle className="text-lg font-semibold text-card-foreground">{title}</CardTitle>
+        <BarChart3 className="h-5 w-5 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         <div className="text-xs text-muted-foreground mb-1">**** {accountNumberSuffix}</div>
-        <div className="text-3xl font-bold">{balance}</div>
+        <div className="text-3xl font-bold text-card-foreground">{balance}</div>
         {change && (
-          <p className={`text-xs ${changeType === 'positive' ? 'text-green-500' : 'text-red-500'} mt-1`}>
+          <p className={`text-xs ${changeType === 'positive' ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'} mt-1`}>
             {changeType === 'positive' ? '+' : ''}{change} this month
           </p>
         )}
@@ -33,7 +33,7 @@ const AccountSummaryCard: React.FC<AccountCardProps> = ({ title, accountNumberSu
           <p className="text-xs text-muted-foreground mt-1">Credit limit: {creditLimit}</p>
         )}
          {dueDateInfo && (
-          <p className="text-xs text-orange-500 mt-1 flex items-center">
+          <p className="text-xs text-orange-500 dark:text-orange-400 mt-1 flex items-center">
             <AlertTriangle className="h-3 w-3 mr-1" /> {dueDateInfo}
           </p>
         )}

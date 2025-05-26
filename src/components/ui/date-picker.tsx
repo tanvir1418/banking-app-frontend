@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react" // Ensure lucide-react is installed
+import { Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -16,7 +16,7 @@ interface DatePickerProps {
   selected?: Date;
   onSelect: (date?: Date) => void;
   className?: string;
-  icon?: React.ReactNode; // To match usage in FundTransferPage
+  icon?: React.ReactNode;
   placeholder?: string;
 }
 
@@ -27,7 +27,7 @@ export function DatePicker({ selected, onSelect, className, icon, placeholder = 
         <Button
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal", // Changed w-[240px] to w-full
+            "w-full justify-start text-left font-normal",
             !selected && "text-muted-foreground",
             className
           )}
@@ -36,13 +36,13 @@ export function DatePicker({ selected, onSelect, className, icon, placeholder = 
           {selected ? format(selected, "PPP") : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 bg-white" align="start"> {/* Added bg-white for popover content */}
+      <PopoverContent className="w-auto p-0 bg-popover text-popover-foreground" align="start"> {/* Changed bg-white to bg-popover and added text-popover-foreground */}
         <Calendar
           mode="single"
           selected={selected}
           onSelect={onSelect}
           initialFocus
-          className={cn("p-3 pointer-events-auto")} // Ensure pointer-events-auto
+          className={cn("p-3 pointer-events-auto")}
         />
       </PopoverContent>
     </Popover>
