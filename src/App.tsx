@@ -10,7 +10,8 @@ import DashboardPage from "./pages/DashboardPage";
 import FundTransferPage from "./pages/FundTransferPage";
 import PaymentGatewayPage from "./pages/PaymentGatewayPage";
 import TransactionHistoryPage from "./pages/TransactionHistoryPage";
-import NotificationsPage from "./pages/NotificationsPage"; // Import the new Notifications page
+import NotificationsPage from "./pages/NotificationsPage";
+import SettingsPage from "./pages/SettingsPage"; // Import the new Settings page
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -34,11 +35,10 @@ const App = () => (
               <Route path="/dashboard/transfers" element={<FundTransferPage />} />
               <Route path="/dashboard/payments" element={<PaymentGatewayPage />} />
               <Route path="/dashboard/history" element={<TransactionHistoryPage />} />
-              <Route path="/dashboard/notifications" element={<NotificationsPage />} /> {/* Add route for Notifications */}
-              {/* Add other dashboard routes here, e.g. /dashboard/accounts, /dashboard/cards, /dashboard/investments as you build them */}
+              <Route path="/dashboard/notifications" element={<NotificationsPage />} />
+              <Route path="/dashboard/settings" element={<SettingsPage />} /> {/* Add route for Settings */}
             </Route>
             
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
@@ -48,3 +48,4 @@ const App = () => (
 );
 
 export default App;
+
