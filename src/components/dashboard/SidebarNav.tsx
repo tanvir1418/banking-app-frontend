@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
-  { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' }, // Added Dashboard link
+  { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   { name: 'Accounts', icon: Home, path: '/dashboard/accounts' },
   { name: 'Fund Transfers', icon: ArrowLeftRight, path: '/dashboard/transfers' },
   { name: 'Payment Gateway', icon: CreditCard, path: '/dashboard/payments' },
@@ -23,11 +23,21 @@ const SidebarNav: React.FC = () => {
   return (
     <div className="w-64 bg-white text-gray-800 flex flex-col min-h-screen border-r border-gray-200">
       <div className="p-6 border-b border-gray-200">
-        <Link to="/dashboard">
-          <Button variant="ghost" className="text-gray-600 hover:text-blue-600 mb-4 flex items-center text-sm px-0">
-            <ChevronLeft className="mr-2 h-4 w-4" /> back
-          </Button>
-        </Link>
+        {location.pathname !== '/dashboard' && (
+          <Link to="/dashboard">
+            <Button variant="ghost" className="text-gray-600 hover:text-blue-600 mb-4 flex items-center text-sm px-0">
+              <ChevronLeft className="mr-2 h-4 w-4" /> back
+            </Button>
+          </Link>
+        )}
+        {location.pathname === '/dashboard' && (
+          <div className="h-[40px] mb-4"> {/* Placeholder to maintain layout consistency when back button is hidden */}
+             <Link to="/dashboard" className="flex items-center space-x-2 mb-6">
+              <img src="/placeholder.svg" alt="Fintech Bank" className="h-8 w-auto" /> {/* Replace with actual logo if available */}
+              <span className="text-xl font-bold text-blue-600">banking</span>
+            </Link>
+          </div>
+        )}
       </div>
       <nav className="flex-grow px-4 py-4 space-y-1">
         {navItems.map((item) => (
@@ -36,12 +46,12 @@ const SidebarNav: React.FC = () => {
             to={item.path}
             className={`flex items-center space-x-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors
               ${
-                location.pathname === item.path || (location.pathname.startsWith(item.path) && item.path !== '/dashboard' && item.name !== 'Dashboard') || (item.name === 'Dashboard' && location.pathname === '/dashboard')
-                ? 'bg-blue-600 text-white' // Changed to blue-600
-                : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600' // Added hover:text-blue-600
+                location.pathname === item.path || (location.pathname.startsWith(item.path + '/') && item.path !== '/dashboard') || (item.name === 'Dashboard' && location.pathname === '/dashboard')
+                ? 'bg-blue-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
               }`}
           >
-            <item.icon className={`h-5 w-5 ${location.pathname === item.path || (location.pathname.startsWith(item.path) && item.path !== '/dashboard' && item.name !== 'Dashboard') || (item.name === 'Dashboard' && location.pathname === '/dashboard') ? 'text-white' : 'text-gray-500 group-hover:text-blue-600'}`} />
+            <item.icon className={`h-5 w-5 ${location.pathname === item.path || (location.pathname.startsWith(item.path + '/') && item.path !== '/dashboard') || (item.name === 'Dashboard' && location.pathname === '/dashboard') ? 'text-white' : 'text-gray-500 group-hover:text-blue-600'}`} />
             <span>{item.name}</span>
           </Link>
         ))}
