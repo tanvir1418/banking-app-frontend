@@ -34,6 +34,7 @@ const TransferContainer: React.FC = () => {
       setCurrentStep(currentStep + 1);
     } else {
       console.log('Submitting transfer:', { fromAccount, toAccount, amount, transferDate, description, isRecurring, saveAsTemplate });
+      // Here you would typically call an API to process the transfer
     }
   };
 
@@ -43,19 +44,32 @@ const TransferContainer: React.FC = () => {
   };
   
   const handleBack = () => {
-    setCurrentStep(currentStep - 1);
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
   
   const handleViewReceipt = () => {
     console.log("View receipt clicked for TXN" + Date.now());
+    // In a real app, this would navigate to a receipt page or show a modal
     alert("Receipt functionality not yet implemented.");
   };
 
   return (
     <Tabs defaultValue="internal" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-grid md:grid-cols-2 gap-1 bg-gray-200 p-1 rounded-lg md:max-w-sm">
-        <TabsTrigger value="internal" className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">Internal Transfer</TabsTrigger>
-        <TabsTrigger value="external" className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm px-4 py-2 text-sm font-medium">External Transfer</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-grid md:grid-cols-2 gap-2 md:max-w-xs mb-6"> {/* Adjusted gap, max-width, added mb-6 */}
+        <TabsTrigger 
+          value="internal" 
+          className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md text-gray-500 hover:text-blue-600 px-4 py-2.5 text-sm font-medium rounded-md transition-all"
+        >
+          Internal Transfer
+        </TabsTrigger>
+        <TabsTrigger 
+          value="external" 
+          className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md text-gray-500 hover:text-blue-600 px-4 py-2.5 text-sm font-medium rounded-md transition-all"
+        >
+          External Transfer
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="internal">
         <TransferFormContainer
@@ -91,3 +105,4 @@ const TransferContainer: React.FC = () => {
 };
 
 export default TransferContainer;
+

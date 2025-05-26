@@ -40,7 +40,7 @@ const TransferFormDetails: React.FC<TransferFormDetailsProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6"> {/* Increased gap-x */}
         <AccountSelector
           id="fromAccount"
           label="From Account"
@@ -63,69 +63,76 @@ const TransferFormDetails: React.FC<TransferFormDetailsProps> = ({
         />
       </div>
 
-      <div>
-        <Label htmlFor="amount" className="text-gray-700">Amount</Label>
+      <div className="space-y-2"> {/* Grouped Amount related fields for better structure if needed */}
+        <Label htmlFor="amount" className="text-gray-700 font-medium">Amount</Label> {/* Added font-medium */}
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <span className="text-gray-500">$</span>
+            <span className="text-gray-500 text-sm">$</span> {/* Ensure consistent size */}
           </div>
           <Input 
             id="amount" 
-            type="text" 
+            type="text" // Consider type="number" or pattern for validation
             placeholder="0.00" 
             value={amount} 
-            onChange={(e) => setAmount(e.target.value)} 
-            className="bg-white pl-8" 
+            onChange={(e) => {
+              const value = e.target.value;
+              // Allow only numbers and one decimal point
+              if (/^\d*\.?\d*$/.test(value)) {
+                setAmount(value);
+              }
+            }}
+            className="bg-white pl-7 text-sm" // Adjusted padding for $
           />
         </div>
         {selectedFromAccount && <p className="text-xs text-gray-500 mt-1">Available balance: ${selectedFromAccount.balance.toFixed(2)}</p>}
       </div>
 
-      <div>
-        <Label htmlFor="transferDate" className="text-gray-700">Transfer Date</Label>
-        <DatePicker selected={transferDate} onSelect={setTransferDate} className="w-full bg-white" placeholder="Select date" />
+      <div className="space-y-2">
+        <Label htmlFor="transferDate" className="text-gray-700 font-medium">Transfer Date</Label> {/* Added font-medium */}
+        <DatePicker selected={transferDate} onSelect={setTransferDate} className="w-full bg-white text-sm" placeholder="Select date" />
       </div>
 
-      <div>
-        <Label htmlFor="description" className="text-gray-700">Description (Optional)</Label>
+      <div className="space-y-2">
+        <Label htmlFor="description" className="text-gray-700 font-medium">Description (Optional)</Label> {/* Added font-medium */}
         <Textarea 
           id="description" 
           placeholder="Add a note about this transfer" 
           value={description} 
           onChange={(e) => setDescription(e.target.value)} 
-          className="bg-white"
+          className="bg-white text-sm"
+          rows={3} // Slightly more space for description
         />
       </div>
       
-      <div className="flex items-center space-x-6 pt-2">
+      <div className="flex items-center justify-between pt-2"> {/* Changed to justify-between */}
         <div className="flex items-center space-x-2">
           <Switch id="recurring" checked={isRecurring} onCheckedChange={setIsRecurring} />
-          <Label htmlFor="recurring" className="font-normal text-gray-700">Make this a recurring transfer</Label>
+          <Label htmlFor="recurring" className="font-normal text-sm text-gray-700">Make this a recurring transfer</Label>
         </div>
         <div className="flex items-center space-x-2">
           <Checkbox id="saveTemplate" checked={saveAsTemplate} onCheckedChange={(checked) => setSaveAsTemplate(checked as boolean)} />
-          <Label htmlFor="saveTemplate" className="font-normal text-gray-700">Save as template</Label>
+          <Label htmlFor="saveTemplate" className="font-normal text-sm text-gray-700">Save as template</Label>
         </div>
       </div>
 
-      <div className="bg-blue-50 p-4 rounded-md text-sm text-blue-800 space-y-1 border border-blue-100">
+      <div className="bg-blue-50 p-4 rounded-lg text-sm text-blue-800 space-y-1 border border-blue-200 shadow-sm"> {/* Enhanced styling for info box */}
         <div className="flex items-start">
-          <InfoIcon className="h-5 w-5 mr-2 mt-0.5 text-blue-600" />
+          <InfoIcon className="h-5 w-5 mr-2.5 mt-0.5 text-blue-600 shrink-0" /> {/* Adjusted margin */}
           <div>
-            <p className="font-semibold">Transfer Information</p>
-            <ul className="list-disc list-inside text-xs mt-1 space-y-1">
+            <p className="font-semibold text-blue-700">Transfer Information</p>
+            <ul className="list-disc list-inside text-xs mt-1.5 space-y-1 text-blue-700/90"> {/* Adjusted margins and colors */}
               <li>Internal transfers between your accounts are free of charge.</li>
               <li>Transfers are typically processed immediately during business hours.</li>
-              <li>External transfers may take 1-3 business days to complete.</li>
+              <li>Scheduled transfers will be processed on the selected date.</li>
               <li>Your transaction will be secured with two-factor authentication.</li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div className="flex justify-between pt-4">
-        <Button variant="outline">Cancel</Button>
-        <Button onClick={onContinue} className="bg-blue-600 hover:bg-blue-700 text-white">
+      <div className="flex justify-between items-center pt-4"> {/* Added items-center */}
+        <Button variant="outline" className="text-sm">Cancel</Button>
+        <Button onClick={onContinue} className="bg-blue-600 hover:bg-blue-700 text-white text-sm">
           Continue to Review <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
@@ -134,3 +141,4 @@ const TransferFormDetails: React.FC<TransferFormDetailsProps> = ({
 };
 
 export default TransferFormDetails;
+
