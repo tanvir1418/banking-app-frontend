@@ -170,12 +170,12 @@ const AdminUserManagement = () => {
         <div className="flex-1 flex flex-col">
           <AdminHeader />
           
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-6 bg-muted/20">
             <div className="max-w-6xl mx-auto">
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-4">
-                  <Button variant="ghost" onClick={handleCloseRoleDetails} className="text-muted-foreground">
+                  <Button variant="ghost" onClick={handleCloseRoleDetails} className="text-muted-foreground hover:text-foreground border border-border">
                     <X className="w-4 h-4 mr-2" />
                     Cancel
                   </Button>
@@ -183,27 +183,27 @@ const AdminUserManagement = () => {
                     <h1 className="text-xl font-semibold text-foreground">Role Details: {selectedRole.role_name}</h1>
                   </div>
                 </div>
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   Save Changes
                 </Button>
               </div>
 
               {/* Role Details Card */}
-              <Card className="bg-card border-border">
+              <Card className="bg-card border-border shadow-lg">
                 <CardContent className="p-6">
                   <Tabs defaultValue="basic-information" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4 mb-6 bg-muted">
-                      <TabsTrigger value="basic-information">Basic Information</TabsTrigger>
-                      <TabsTrigger value="permissions">Permissions</TabsTrigger>
-                      <TabsTrigger value="users">Users (8)</TabsTrigger>
-                      <TabsTrigger value="activity-log">Activity Log</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-4 mb-6 bg-muted border border-border">
+                      <TabsTrigger value="basic-information" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Basic Information</TabsTrigger>
+                      <TabsTrigger value="permissions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Permissions</TabsTrigger>
+                      <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Users (8)</TabsTrigger>
+                      <TabsTrigger value="activity-log" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Activity Log</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="basic-information" className="mt-6">
                       <div className="grid grid-cols-2 gap-6">
                         <div>
                           <Label className="block text-sm font-medium text-foreground mb-2">Role Name</Label>
-                          <Input value={selectedRole.role_name} className="w-full bg-background border-border" />
+                          <Input value={selectedRole.role_name} className="w-full bg-background border-border focus:border-primary" />
                         </div>
                         <div className="flex items-center space-x-4">
                           <Label className="block text-sm font-medium text-foreground">Status</Label>
@@ -214,12 +214,12 @@ const AdminUserManagement = () => {
                         </div>
                         <div className="col-span-2">
                           <Label className="block text-sm font-medium text-foreground mb-2">Description</Label>
-                          <Input value={selectedRole.description} className="w-full bg-background border-border" />
+                          <Input value={selectedRole.description} className="w-full bg-background border-border focus:border-primary" />
                         </div>
                         <div>
                           <Label className="block text-sm font-medium text-foreground mb-2">Department</Label>
                           <Select defaultValue={selectedRole.department}>
-                            <SelectTrigger className="bg-background border-border">
+                            <SelectTrigger className="bg-background border-border focus:border-primary">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="bg-popover border-border">
@@ -233,24 +233,24 @@ const AdminUserManagement = () => {
                         </div>
                       </div>
                       
-                      <div className="mt-8">
+                      <div className="mt-8 p-4 bg-muted/50 rounded-lg border border-border">
                         <h3 className="text-lg font-medium text-foreground mb-4">Role Permissions</h3>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="flex items-center space-x-2">
                             <Checkbox id="full-admin" checked />
-                            <Label htmlFor="full-admin" className="text-sm text-blue-600 dark:text-blue-400">Full Administrative Access</Label>
+                            <Label htmlFor="full-admin" className="text-sm text-primary">Full Administrative Access</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox id="user-mgmt" checked />
-                            <Label htmlFor="user-mgmt" className="text-sm text-blue-600 dark:text-blue-400">User Management</Label>
+                            <Label htmlFor="user-mgmt" className="text-sm text-primary">User Management</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox id="transaction-approval" checked />
-                            <Label htmlFor="transaction-approval" className="text-sm text-blue-600 dark:text-blue-400">Transaction Approval (Any Amount)</Label>
+                            <Label htmlFor="transaction-approval" className="text-sm text-primary">Transaction Approval (Any Amount)</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox id="system-config" checked />
-                            <Label htmlFor="system-config" className="text-sm text-blue-600 dark:text-blue-400">System Configuration</Label>
+                            <Label htmlFor="system-config" className="text-sm text-primary">System Configuration</Label>
                           </div>
                         </div>
                       </div>
@@ -261,32 +261,32 @@ const AdminUserManagement = () => {
                         <div className="flex items-center justify-between">
                           <h3 className="text-lg font-medium text-foreground">Detailed Permission Matrix</h3>
                           <div className="flex space-x-2">
-                            <Button variant="outline" size="sm">Expand All</Button>
-                            <Button variant="outline" size="sm">Collapse All</Button>
+                            <Button variant="outline" size="sm" className="border-border">Expand All</Button>
+                            <Button variant="outline" size="sm" className="border-border">Collapse All</Button>
                           </div>
                         </div>
                         
-                        <div className="flex items-center space-x-2 mb-4">
+                        <div className="flex items-center space-x-2 mb-4 p-3 bg-muted/50 rounded-lg border border-border">
                           <Checkbox id="select-all" />
                           <Label htmlFor="select-all" className="text-sm font-medium text-foreground">Select All Permissions</Label>
                         </div>
 
-                        <div className="border border-border rounded-lg overflow-hidden">
+                        <div className="border border-border rounded-lg overflow-hidden bg-card">
                           <Table>
-                            <TableHeader className="bg-blue-600">
-                              <TableRow className="border-none hover:bg-blue-600">
-                                <TableHead className="text-white font-medium text-xs uppercase tracking-wide">MODULE/FEATURE</TableHead>
-                                <TableHead className="text-white font-medium text-xs uppercase tracking-wide text-center">VIEW</TableHead>
-                                <TableHead className="text-white font-medium text-xs uppercase tracking-wide text-center">CREATE</TableHead>
-                                <TableHead className="text-white font-medium text-xs uppercase tracking-wide text-center">EDIT</TableHead>
-                                <TableHead className="text-white font-medium text-xs uppercase tracking-wide text-center">DELETE</TableHead>
-                                <TableHead className="text-white font-medium text-xs uppercase tracking-wide text-center">APPROVE</TableHead>
+                            <TableHeader className="bg-primary">
+                              <TableRow className="border-none hover:bg-primary">
+                                <TableHead className="text-primary-foreground font-medium text-xs uppercase tracking-wide">MODULE/FEATURE</TableHead>
+                                <TableHead className="text-primary-foreground font-medium text-xs uppercase tracking-wide text-center">VIEW</TableHead>
+                                <TableHead className="text-primary-foreground font-medium text-xs uppercase tracking-wide text-center">CREATE</TableHead>
+                                <TableHead className="text-primary-foreground font-medium text-xs uppercase tracking-wide text-center">EDIT</TableHead>
+                                <TableHead className="text-primary-foreground font-medium text-xs uppercase tracking-wide text-center">DELETE</TableHead>
+                                <TableHead className="text-primary-foreground font-medium text-xs uppercase tracking-wide text-center">APPROVE</TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
                               {permissions.map((permission, index) => (
-                                <TableRow key={index} className="border-b border-border">
-                                  <TableCell className="py-3 px-4">
+                                <TableRow key={index} className="border-b border-border hover:bg-muted/50">
+                                  <TableCell className="py-3 px-4 bg-muted/20">
                                     <div className={`${permission.submodule ? 'ml-6' : ''}`}>
                                       {permission.submodule ? (
                                         <span className="text-sm text-muted-foreground">{permission.submodule}</span>
@@ -295,19 +295,19 @@ const AdminUserManagement = () => {
                                       )}
                                     </div>
                                   </TableCell>
-                                  <TableCell className="text-center">
+                                  <TableCell className="text-center bg-card">
                                     <Checkbox checked={permission.view} />
                                   </TableCell>
-                                  <TableCell className="text-center">
+                                  <TableCell className="text-center bg-card">
                                     <Checkbox checked={permission.create} />
                                   </TableCell>
-                                  <TableCell className="text-center">
+                                  <TableCell className="text-center bg-card">
                                     <Checkbox checked={permission.edit} />
                                   </TableCell>
-                                  <TableCell className="text-center">
+                                  <TableCell className="text-center bg-card">
                                     <Checkbox checked={permission.delete} />
                                   </TableCell>
-                                  <TableCell className="text-center">
+                                  <TableCell className="text-center bg-card">
                                     <Checkbox checked={permission.approve} />
                                   </TableCell>
                                 </TableRow>
@@ -319,13 +319,13 @@ const AdminUserManagement = () => {
                     </TabsContent>
 
                     <TabsContent value="users" className="mt-6">
-                      <div className="text-center py-8">
+                      <div className="text-center py-8 bg-muted/20 rounded-lg border border-border">
                         <p className="text-muted-foreground">Users assigned to this role will be displayed here.</p>
                       </div>
                     </TabsContent>
 
                     <TabsContent value="activity-log" className="mt-6">
-                      <div className="text-center py-8">
+                      <div className="text-center py-8 bg-muted/20 rounded-lg border border-border">
                         <p className="text-muted-foreground">Activity log for this role will be displayed here.</p>
                       </div>
                     </TabsContent>
@@ -345,7 +345,7 @@ const AdminUserManagement = () => {
       <div className="flex-1 flex flex-col">
         <AdminHeader />
         
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 bg-muted/20">
           {/* Breadcrumb */}
           <div className="mb-4">
             <nav className="text-sm text-muted-foreground">
@@ -360,7 +360,7 @@ const AdminUserManagement = () => {
                 <h1 className="text-2xl font-semibold text-foreground mb-1">User Role Management</h1>
                 <p className="text-sm text-muted-foreground">Create and manage user roles and permissions</p>
               </div>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Plus className="mr-2 h-4 w-4" />
                 Add New Role
               </Button>
@@ -368,7 +368,7 @@ const AdminUserManagement = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex items-center justify-between mb-6 space-x-4">
+          <div className="flex items-center justify-between mb-6 space-x-4 p-4 bg-card rounded-lg border border-border shadow-sm">
             <div className="flex items-center space-x-4 flex-1">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -376,12 +376,12 @@ const AdminUserManagement = () => {
                   placeholder="Search roles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-background border-border"
+                  className="pl-10 bg-background border-border focus:border-primary"
                 />
               </div>
               
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-48 bg-background border-border">
+                <SelectTrigger className="w-48 bg-background border-border focus:border-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -392,7 +392,7 @@ const AdminUserManagement = () => {
               </Select>
 
               <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-                <SelectTrigger className="w-48 bg-background border-border">
+                <SelectTrigger className="w-48 bg-background border-border focus:border-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -413,22 +413,22 @@ const AdminUserManagement = () => {
           </div>
 
           {/* Roles Table */}
-          <Card className="bg-card border-border">
+          <Card className="bg-card border-border shadow-lg">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-blue-600 hover:bg-blue-600 border-none">
-                      <TableHead className="text-white font-medium">
+                    <TableRow className="bg-primary hover:bg-primary border-none">
+                      <TableHead className="text-primary-foreground font-medium">
                         <Checkbox />
                       </TableHead>
-                      <TableHead className="text-white font-medium">ROLE NAME</TableHead>
-                      <TableHead className="text-white font-medium">DESCRIPTION</TableHead>
-                      <TableHead className="text-white font-medium">USERS</TableHead>
-                      <TableHead className="text-white font-medium">DEPARTMENT</TableHead>
-                      <TableHead className="text-white font-medium">CREATED</TableHead>
-                      <TableHead className="text-white font-medium">STATUS</TableHead>
-                      <TableHead className="text-white font-medium">ACTIONS</TableHead>
+                      <TableHead className="text-primary-foreground font-medium">ROLE NAME</TableHead>
+                      <TableHead className="text-primary-foreground font-medium">DESCRIPTION</TableHead>
+                      <TableHead className="text-primary-foreground font-medium">USERS</TableHead>
+                      <TableHead className="text-primary-foreground font-medium">DEPARTMENT</TableHead>
+                      <TableHead className="text-primary-foreground font-medium">CREATED</TableHead>
+                      <TableHead className="text-primary-foreground font-medium">STATUS</TableHead>
+                      <TableHead className="text-primary-foreground font-medium">ACTIONS</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -469,15 +469,15 @@ const AdminUserManagement = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="bg-popover border-border">
-                              <DropdownMenuItem className="text-popover-foreground">
+                              <DropdownMenuItem className="text-popover-foreground hover:bg-accent hover:text-accent-foreground">
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Details
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-popover-foreground">
+                              <DropdownMenuItem className="text-popover-foreground hover:bg-accent hover:text-accent-foreground">
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit Role
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600 dark:text-red-400">
+                              <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950">
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Delete Role
                               </DropdownMenuItem>
@@ -491,7 +491,7 @@ const AdminUserManagement = () => {
               </div>
 
               {/* Pagination */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-muted/20">
                 <div className="text-sm text-muted-foreground">
                   Showing 1 to 5 of 12 results
                 </div>
@@ -499,7 +499,7 @@ const AdminUserManagement = () => {
                   <Button variant="outline" size="sm" disabled className="text-muted-foreground border-border">
                     Previous
                   </Button>
-                  <Button size="sm" className="bg-blue-600 text-white">1</Button>
+                  <Button size="sm" className="bg-primary text-primary-foreground">1</Button>
                   <Button variant="outline" size="sm" className="text-muted-foreground border-border">2</Button>
                   <Button variant="outline" size="sm" className="text-muted-foreground border-border">3</Button>
                   <span className="text-muted-foreground">...</span>
