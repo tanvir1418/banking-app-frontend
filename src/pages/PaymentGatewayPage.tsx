@@ -63,19 +63,19 @@ const PaymentGatewayPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-100"> {/* Changed bg to slate-100 for slightly lighter background */}
+    <div className="flex min-h-screen bg-background">
       <SidebarNav />
       <div className="flex-1 flex flex-col">
         <DashboardHeader />
-        <main className="flex-1 p-6 md:p-8 lg:p-10 overflow-y-auto space-y-8"> {/* Increased padding */}
+        <main className="flex-1 p-6 md:p-8 lg:p-10 overflow-y-auto space-y-8">
           <section>
-            <h1 className="text-3xl font-semibold text-gray-800">Payment Gateway</h1>
-            <p className="text-gray-600 mt-1">Manage your bills and credit card payments in one place</p> {/* Added mt-1 */}
+            <h1 className="text-3xl font-semibold text-foreground">Payment Gateway</h1>
+            <p className="text-muted-foreground mt-1">Manage your bills and credit card payments in one place</p>
           </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8"> {/* Adjusted gap */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             {/* Left Column */}
-            <div className="lg:col-span-2 space-y-6 md:space-y-8"> {/* Adjusted space-y */}
+            <div className="lg:col-span-2 space-y-6 md:space-y-8">
               <BillCategoriesGrid categories={billCategories} />
               <UpcomingBillsList bills={upcomingBillsData} />
               <AddNewBillerForm />

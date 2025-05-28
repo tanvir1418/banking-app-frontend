@@ -57,7 +57,7 @@ const TransferFormContainer: React.FC<TransferFormContainerProps> = ({
   onBack,
 }) => {
   return (
-    <Card className="shadow-lg mt-6 bg-white md:max-w-3xl lg:max-w-4xl mx-auto">
+    <Card className="shadow-lg mt-6 bg-card md:max-w-3xl lg:max-w-4xl mx-auto">
       <CardHeader>
         <TransferStepper currentStep={currentStep} />
       </CardHeader>

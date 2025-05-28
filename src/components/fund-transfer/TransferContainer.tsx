@@ -57,16 +57,16 @@ const TransferContainer: React.FC = () => {
 
   return (
     <Tabs defaultValue="internal" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-grid md:grid-cols-2 gap-2 md:max-w-xs mb-6"> {/* Adjusted gap, max-width, added mb-6 */}
+      <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-grid md:grid-cols-2 gap-2 md:max-w-xs mb-6">
         <TabsTrigger 
           value="internal" 
-          className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md text-gray-500 hover:text-blue-600 px-4 py-2.5 text-sm font-medium rounded-md transition-all"
+          className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-muted-foreground hover:text-primary px-4 py-2.5 text-sm font-medium rounded-md transition-all"
         >
           Internal Transfer
         </TabsTrigger>
         <TabsTrigger 
           value="external" 
-          className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md text-gray-500 hover:text-blue-600 px-4 py-2.5 text-sm font-medium rounded-md transition-all"
+          className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md text-muted-foreground hover:text-primary px-4 py-2.5 text-sm font-medium rounded-md transition-all"
         >
           External Transfer
         </TabsTrigger>
@@ -105,4 +105,3 @@ const TransferContainer: React.FC = () => {
 };
 
 export default TransferContainer;
-

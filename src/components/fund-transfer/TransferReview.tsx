@@ -25,9 +25,9 @@ const TransferReview: React.FC<TransferReviewProps> = ({
   const toAccountName = accounts.find(a => a.id === toAccount)?.name;
 
   return (
-    <div className="space-y-6"> {/* Increased spacing */}
-      <CardTitle className="text-xl mb-4 font-semibold text-gray-800">Review Transfer Details</CardTitle>
-      <div className="space-y-3 text-sm text-gray-700 p-4 border rounded-md bg-slate-50"> {/* Added padding and bg */}
+    <div className="space-y-6">
+      <CardTitle className="text-xl mb-4 font-semibold text-card-foreground">Review Transfer Details</CardTitle>
+      <div className="space-y-3 text-sm text-card-foreground p-4 border border-border rounded-md bg-muted/30">
         <div className="flex justify-between"><span className="font-medium">From:</span> <span>{fromAccountName || 'N/A'}</span></div>
         <div className="flex justify-between"><span className="font-medium">To:</span> <span>{toAccountName || 'N/A'}</span></div>
         <div className="flex justify-between"><span className="font-medium">Amount:</span> <span>${parseFloat(amount || "0").toFixed(2)}</span></div>
@@ -38,7 +38,7 @@ const TransferReview: React.FC<TransferReviewProps> = ({
       </div>
       <div className="flex justify-end space-x-3 pt-6">
         <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button onClick={onConfirm} className="bg-blue-600 hover:bg-blue-700 text-white">Confirm Transfer</Button>
+        <Button onClick={onConfirm} className="bg-primary hover:bg-primary/90 text-primary-foreground">Confirm Transfer</Button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Wallet, TrendingUp, TrendingDown, LucideIcon } from 'lucide-react'; // Using Wallet for Total Balance
+import { Wallet, TrendingUp, TrendingDown, LucideIcon } from 'lucide-react';
 
 interface SummaryCardProps {
   title: string;
@@ -13,25 +13,25 @@ interface SummaryCardProps {
 }
 
 const SummaryCard: React.FC<SummaryCardProps> = ({ title, amount, percentageChange, icon: Icon, iconBgColor, iconTextColor }) => (
-  <Card className="shadow-md">
+  <Card className="shadow-md bg-card">
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle className="text-sm font-medium text-gray-500">{title}</CardTitle>
+      <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
       <div className={`p-2 rounded-md ${iconBgColor}`}>
         <Icon className={`h-5 w-5 ${iconTextColor}`} />
       </div>
     </CardHeader>
     <CardContent>
-      <div className="text-2xl font-bold text-gray-800">{amount}</div>
-      <p className="text-xs text-gray-500">{percentageChange}</p>
+      <div className="text-2xl font-bold text-card-foreground">{amount}</div>
+      <p className="text-xs text-muted-foreground">{percentageChange}</p>
     </CardContent>
   </Card>
 );
 
 const TransactionSummary: React.FC = () => {
   const summaryData = {
-    totalBalance: { title: "Total Balance", amount: "$24,562.00", percentageChange: "+2.5% from last month", icon: Wallet, bgColor: "bg-blue-100", textColor: "text-blue-600" },
-    income: { title: "Income", amount: "$8,350.00", percentageChange: "+4.2% from last month", icon: TrendingUp, bgColor: "bg-green-100", textColor: "text-green-600" },
-    expenses: { title: "Expenses", amount: "$5,240.00", percentageChange: "+1.8% from last month", icon: TrendingDown, bgColor: "bg-red-100", textColor: "text-red-600" },
+    totalBalance: { title: "Total Balance", amount: "$24,562.00", percentageChange: "+2.5% from last month", icon: Wallet, bgColor: "bg-blue-100 dark:bg-blue-900/30", textColor: "text-blue-600 dark:text-blue-400" },
+    income: { title: "Income", amount: "$8,350.00", percentageChange: "+4.2% from last month", icon: TrendingUp, bgColor: "bg-green-100 dark:bg-green-900/30", textColor: "text-green-600 dark:text-green-400" },
+    expenses: { title: "Expenses", amount: "$5,240.00", percentageChange: "+1.8% from last month", icon: TrendingDown, bgColor: "bg-red-100 dark:bg-red-900/30", textColor: "text-red-600 dark:text-red-400" },
   };
 
   return (
