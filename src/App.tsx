@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -19,6 +18,7 @@ import NotificationsPage from '@/pages/NotificationsPage';
 import SettingsPage from '@/pages/SettingsPage';
 import AdminUserManagement from '@/pages/AdminUserManagement';
 import AdminAccountManagement from '@/pages/AdminAccountManagement';
+import AdminSystemMonitoring from '@/pages/AdminSystemMonitoring';
 
 function App() {
   return (
@@ -42,6 +42,7 @@ function App() {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/users" element={<AdminUserManagement />} />
                 <Route path="/admin/accounts" element={<AdminAccountManagement />} />
+                <Route path="/admin/monitoring" element={<AdminSystemMonitoring />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
