@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -7,6 +8,8 @@ import { QueryClient } from '@/contexts/QueryContext';
 import Index from '@/pages/Index';
 import AuthPage from '@/pages/AuthPage';
 import DashboardPage from '@/pages/DashboardPage';
+import DashboardAccountsPage from '@/pages/DashboardAccountsPage';
+import DashboardSupportPage from '@/pages/DashboardSupportPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import NotFound from '@/pages/NotFound';
 import AdminRoute from '@/components/AdminRoute';
@@ -32,6 +35,15 @@ function App() {
               <Route path="/auth" element={<AuthPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/dashboard/accounts" element={<DashboardAccountsPage />} />
+                <Route path="/dashboard/transfers" element={<FundTransferPage />} />
+                <Route path="/dashboard/payments" element={<PaymentGatewayPage />} />
+                <Route path="/dashboard/history" element={<TransactionHistoryPage />} />
+                <Route path="/dashboard/notifications" element={<NotificationsPage />} />
+                <Route path="/dashboard/settings" element={<SettingsPage />} />
+                <Route path="/dashboard/support" element={<DashboardSupportPage />} />
+                <Route path="/dashboard/profile" element={<SettingsPage />} />
+                {/* Legacy routes for backward compatibility */}
                 <Route path="/transfer" element={<FundTransferPage />} />
                 <Route path="/transactions" element={<TransactionHistoryPage />} />
                 <Route path="/payments" element={<PaymentGatewayPage />} />
