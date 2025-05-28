@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import AdminHeader from '@/components/admin/AdminHeader';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import { supabase } from '@/integrations/supabase/client';
@@ -134,9 +135,9 @@ const AdminUserManagement = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Active':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400">Active</Badge>;
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>;
       case 'Inactive':
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400">Inactive</Badge>;
+        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Inactive</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -163,7 +164,7 @@ const AdminUserManagement = () => {
 
   if (showRoleDetails && selectedRole) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex w-full">
+      <div className="min-h-screen bg-gray-50 flex w-full">
         <AdminSidebar />
         <div className="flex-1 flex flex-col">
           <AdminHeader />
@@ -173,12 +174,12 @@ const AdminUserManagement = () => {
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-4">
-                  <Button variant="ghost" onClick={handleCloseRoleDetails} className="text-gray-600 dark:text-gray-400">
+                  <Button variant="ghost" onClick={handleCloseRoleDetails} className="text-gray-600">
                     <X className="w-4 h-4 mr-2" />
                     Cancel
                   </Button>
                   <div>
-                    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Role Details: {selectedRole.role_name}</h1>
+                    <h1 className="text-xl font-semibold text-gray-900">Role Details: {selectedRole.role_name}</h1>
                   </div>
                 </div>
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -187,10 +188,10 @@ const AdminUserManagement = () => {
               </div>
 
               {/* Role Details Card */}
-              <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <Card className="bg-white border border-gray-200">
                 <CardContent className="p-6">
                   <Tabs defaultValue="basic-information" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4">
+                    <TabsList className="grid w-full grid-cols-4 mb-6">
                       <TabsTrigger value="basic-information">Basic Information</TabsTrigger>
                       <TabsTrigger value="permissions">Permissions</TabsTrigger>
                       <TabsTrigger value="users">Users (8)</TabsTrigger>
@@ -200,24 +201,22 @@ const AdminUserManagement = () => {
                     <TabsContent value="basic-information" className="mt-6">
                       <div className="grid grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role Name</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Role Name</label>
                           <Input value={selectedRole.role_name} className="w-full" />
                         </div>
                         <div className="flex items-center space-x-4">
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                          <label className="block text-sm font-medium text-gray-700">Status</label>
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm text-gray-600 dark:text-gray-400">Active</span>
-                            <div className="w-12 h-6 bg-blue-600 rounded-full relative">
-                              <div className="w-5 h-5 bg-white rounded-full absolute top-0.5 right-0.5 shadow-sm"></div>
-                            </div>
+                            <span className="text-sm text-gray-600">Active</span>
+                            <Switch checked={true} />
                           </div>
                         </div>
                         <div className="col-span-2">
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                           <Input value={selectedRole.description} className="w-full" />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Department</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
                           <Select defaultValue={selectedRole.department}>
                             <SelectTrigger>
                               <SelectValue />
@@ -234,8 +233,8 @@ const AdminUserManagement = () => {
                       </div>
                       
                       <div className="mt-8">
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Role Permissions</h3>
-                        <div className="grid grid-cols-4 gap-4">
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Role Permissions</h3>
+                        <div className="grid grid-cols-2 gap-4">
                           <div className="flex items-center space-x-2">
                             <Checkbox id="full-admin" checked />
                             <label htmlFor="full-admin" className="text-sm text-blue-600">Full Administrative Access</label>
@@ -259,7 +258,7 @@ const AdminUserManagement = () => {
                     <TabsContent value="permissions" className="mt-6">
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Detailed Permission Matrix</h3>
+                          <h3 className="text-lg font-medium text-gray-900">Detailed Permission Matrix</h3>
                           <div className="flex space-x-2">
                             <Button variant="outline" size="sm">Expand All</Button>
                             <Button variant="outline" size="sm">Collapse All</Button>
@@ -268,10 +267,10 @@ const AdminUserManagement = () => {
                         
                         <div className="flex items-center space-x-2 mb-4">
                           <Checkbox id="select-all" />
-                          <label htmlFor="select-all" className="text-sm font-medium text-gray-700 dark:text-gray-300">Select All Permissions</label>
+                          <label htmlFor="select-all" className="text-sm font-medium text-gray-700">Select All Permissions</label>
                         </div>
 
-                        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div className="border border-gray-200 rounded-lg overflow-hidden">
                           <Table>
                             <TableHeader className="bg-blue-600">
                               <TableRow className="border-none hover:bg-blue-600">
@@ -285,13 +284,13 @@ const AdminUserManagement = () => {
                             </TableHeader>
                             <TableBody>
                               {permissions.map((permission, index) => (
-                                <TableRow key={index} className="border-b border-gray-100 dark:border-gray-700">
+                                <TableRow key={index} className="border-b border-gray-100">
                                   <TableCell className="py-3 px-4">
                                     <div className={`${permission.submodule ? 'ml-6' : ''}`}>
                                       {permission.submodule ? (
-                                        <span className="text-sm text-gray-600 dark:text-gray-400">{permission.submodule}</span>
+                                        <span className="text-sm text-gray-600">{permission.submodule}</span>
                                       ) : (
-                                        <span className="font-medium text-gray-900 dark:text-white">{permission.module}</span>
+                                        <span className="font-medium text-gray-900">{permission.module}</span>
                                       )}
                                     </div>
                                   </TableCell>
@@ -320,13 +319,13 @@ const AdminUserManagement = () => {
 
                     <TabsContent value="users" className="mt-6">
                       <div className="text-center py-8">
-                        <p className="text-gray-500 dark:text-gray-400">Users assigned to this role will be displayed here.</p>
+                        <p className="text-gray-500">Users assigned to this role will be displayed here.</p>
                       </div>
                     </TabsContent>
 
                     <TabsContent value="activity-log" className="mt-6">
                       <div className="text-center py-8">
-                        <p className="text-gray-500 dark:text-gray-400">Activity log for this role will be displayed here.</p>
+                        <p className="text-gray-500">Activity log for this role will be displayed here.</p>
                       </div>
                     </TabsContent>
                   </Tabs>
@@ -340,7 +339,7 @@ const AdminUserManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex w-full">
+    <div className="min-h-screen bg-gray-50 flex w-full">
       <AdminSidebar />
       <div className="flex-1 flex flex-col">
         <AdminHeader />
@@ -350,8 +349,8 @@ const AdminUserManagement = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-1">User Role Management</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Create and manage user roles and permissions</p>
+                <h1 className="text-2xl font-semibold text-gray-900 mb-1">User Role Management</h1>
+                <p className="text-sm text-gray-500">Create and manage user roles and permissions</p>
               </div>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="mr-2 h-4 w-4" />
@@ -360,64 +359,60 @@ const AdminUserManagement = () => {
             </div>
           </div>
 
-          {/* Filters Card */}
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mb-6">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4 flex-1">
-                  <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
-                    <Input
-                      placeholder="Search roles..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-48 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                      <SelectItem value="All Status">All Status</SelectItem>
-                      <SelectItem value="Active">Active</SelectItem>
-                      <SelectItem value="Inactive">Inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-                    <SelectTrigger className="w-48 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                      <SelectItem value="All Departments">All Departments</SelectItem>
-                      <SelectItem value="IT">IT</SelectItem>
-                      <SelectItem value="Operations">Operations</SelectItem>
-                      <SelectItem value="Finance">Finance</SelectItem>
-                      <SelectItem value="Customer Service">Customer Service</SelectItem>
-                      <SelectItem value="Legal">Legal</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button variant="outline" className="text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700">
-                  <Filter className="mr-2 h-4 w-4" />
-                  More Filters
-                </Button>
+          {/* Filters */}
+          <div className="flex items-center justify-between mb-6 space-x-4">
+            <div className="flex items-center space-x-4 flex-1">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search roles..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
               </div>
-            </CardContent>
-          </Card>
+              
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All Status">All Status</SelectItem>
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All Departments">All Departments</SelectItem>
+                  <SelectItem value="IT">IT</SelectItem>
+                  <SelectItem value="Operations">Operations</SelectItem>
+                  <SelectItem value="Finance">Finance</SelectItem>
+                  <SelectItem value="Customer Service">Customer Service</SelectItem>
+                  <SelectItem value="Legal">Legal</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button variant="outline">
+              <Filter className="mr-2 h-4 w-4" />
+              More Filters
+            </Button>
+          </div>
 
           {/* Roles Table */}
-          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <Card className="bg-white border border-gray-200">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-blue-600 hover:bg-blue-600">
                       <TableHead className="text-white font-medium">
-                        <input type="checkbox" className="rounded border-blue-400" />
+                        <Checkbox />
                       </TableHead>
                       <TableHead className="text-white font-medium">ROLE NAME</TableHead>
                       <TableHead className="text-white font-medium">DESCRIPTION</TableHead>
@@ -432,28 +427,28 @@ const AdminUserManagement = () => {
                     {filteredRoles.map((role, index) => (
                       <TableRow 
                         key={index} 
-                        className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                        className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
                         onClick={() => handleRoleClick(role)}
                       >
                         <TableCell onClick={(e) => e.stopPropagation()}>
-                          <input type="checkbox" className="rounded border-gray-300 dark:border-gray-600" />
+                          <Checkbox />
                         </TableCell>
                         <TableCell>
-                          <span className="font-medium text-gray-900 dark:text-white">{role.role_name}</span>
+                          <span className="font-medium text-gray-900">{role.role_name}</span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-600 dark:text-gray-400 text-sm">
+                          <span className="text-gray-600 text-sm">
                             {role.description.length > 60 ? `${role.description.substring(0, 60)}...` : role.description}
                           </span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-900 dark:text-white">{role.users} users</span>
+                          <span className="text-gray-900">{role.users} users</span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-600 dark:text-gray-400">{role.department}</span>
+                          <span className="text-gray-600">{role.department}</span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-600 dark:text-gray-400">{role.created}</span>
+                          <span className="text-gray-600">{role.created}</span>
                         </TableCell>
                         <TableCell>
                           {getStatusBadge(role.status)}
@@ -461,11 +456,11 @@ const AdminUserManagement = () => {
                         <TableCell onClick={(e) => e.stopPropagation()}>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
+                              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <DropdownMenuContent align="end">
                               <DropdownMenuItem>
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Details
@@ -474,7 +469,7 @@ const AdminUserManagement = () => {
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit Role
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600 dark:text-red-400">
+                              <DropdownMenuItem className="text-red-600">
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Delete Role
                               </DropdownMenuItem>
@@ -488,8 +483,8 @@ const AdminUserManagement = () => {
               </div>
 
               {/* Pagination */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                <div className="text-sm text-gray-500">
                   Showing 1 to 5 of 12 results
                 </div>
                 <div className="flex items-center space-x-2">
@@ -497,11 +492,11 @@ const AdminUserManagement = () => {
                     Previous
                   </Button>
                   <Button size="sm" className="bg-blue-600 text-white">1</Button>
-                  <Button variant="outline" size="sm" className="text-gray-600 dark:text-gray-400">2</Button>
-                  <Button variant="outline" size="sm" className="text-gray-600 dark:text-gray-400">3</Button>
+                  <Button variant="outline" size="sm" className="text-gray-600">2</Button>
+                  <Button variant="outline" size="sm" className="text-gray-600">3</Button>
                   <span className="text-gray-500">...</span>
-                  <Button variant="outline" size="sm" className="text-gray-600 dark:text-gray-400">8</Button>
-                  <Button variant="outline" size="sm" className="text-gray-600 dark:text-gray-400">
+                  <Button variant="outline" size="sm" className="text-gray-600">8</Button>
+                  <Button variant="outline" size="sm" className="text-gray-600">
                     Next
                   </Button>
                 </div>
