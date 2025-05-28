@@ -7,16 +7,16 @@ import { Search } from 'lucide-react';
 
 const AddNewBillerForm: React.FC = () => {
   return (
-    <Card className="bg-white shadow-lg">
-      <CardHeader className="pb-4"> {/* Adjusted padding */}
-          <CardTitle className="text-xl text-gray-800">Add New Bill</CardTitle>
+    <Card className="bg-card shadow-lg border border-border">
+      <CardHeader className="pb-4">
+          <CardTitle className="text-xl text-card-foreground">Add New Bill</CardTitle>
       </CardHeader>
       <CardContent className="flex items-center space-x-3">
           <div className="relative flex-grow">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <Input placeholder="Search for a biller (e.g., PG&E, Netflix)" className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"/> {/* Enhanced input styling */}
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input placeholder="Search for a biller (e.g., PG&E, Netflix)" className="pl-10 bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"/>
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6">Add Bill</Button> {/* Added px-6 */}
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6">Add Bill</Button>
       </CardContent>
     </Card>
   );
