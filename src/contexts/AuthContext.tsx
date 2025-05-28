@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchUserRole = async (userId: string) => {
     try {
+      console.log('Fetching role for user:', userId);
       const { data, error } = await supabase
         .from('user_roles')
         .select('role')
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return null;
       }
       
+      console.log('User role data:', data);
       return data?.role || null;
     } catch (error) {
       console.error('Error in fetchUserRole:', error);
@@ -46,6 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const refreshUserRole = async () => {
     if (user) {
       const role = await fetchUserRole(user.id);
+      console.log('Refreshed user role:', role);
       setUserRole(role);
     }
   };
@@ -53,11 +56,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setIsLoading(true);
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      console.log('Initial session:', session);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
         const role = await fetchUserRole(session.user.id);
+        console.log('Initial user role:', role);
         setUserRole(role);
       } else {
         setUserRole(null);
@@ -77,15 +82,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          // Add a small delay to ensure the user_roles trigger has executed
           setTimeout(async () => {
             const role = await fetchUserRole(session.user.id);
+            console.log('Auth state change - user role:', role);
             setUserRole(role);
-          }, 0);
+            setIsLoading(false);
+          }, 500);
         } else {
           setUserRole(null);
+          setIsLoading(false);
         }
-        
-        setIsLoading(false);
       }
     );
 
