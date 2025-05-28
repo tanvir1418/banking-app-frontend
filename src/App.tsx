@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -17,6 +18,7 @@ import PaymentGatewayPage from '@/pages/PaymentGatewayPage';
 import NotificationsPage from '@/pages/NotificationsPage';
 import SettingsPage from '@/pages/SettingsPage';
 import AdminUserManagement from '@/pages/AdminUserManagement';
+import AdminAccountManagement from '@/pages/AdminAccountManagement';
 
 function App() {
   return (
@@ -39,6 +41,7 @@ function App() {
               <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/users" element={<AdminUserManagement />} />
+                <Route path="/admin/accounts" element={<AdminAccountManagement />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
