@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, MoreHorizontal, Eye, Edit, Trash2 } from 'lucide-react';
+import { Search, Plus, MoreHorizontal, Eye, Edit, Trash2, Filter } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   DropdownMenu,
@@ -12,6 +12,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import AdminHeader from '@/components/admin/AdminHeader';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import { supabase } from '@/integrations/supabase/client';
@@ -46,7 +54,7 @@ const AdminUserManagement = () => {
     },
     {
       role_name: 'Branch Manager',
-      description: 'Manages branch operations, approves transactions...',
+      description: 'Manages branch operations, approves transactions and oversees daily activities',
       users: 12,
       department: 'Operations',
       created: 'Apr 15, 2025',
@@ -54,7 +62,7 @@ const AdminUserManagement = () => {
     },
     {
       role_name: 'Loan Officer',
-      description: 'Processes loan applications, evaluates credit reports...',
+      description: 'Processes loan applications, evaluates credit reports and manages lending activities',
       users: 24,
       department: 'Finance',
       created: 'Mar 28, 2025',
@@ -62,7 +70,7 @@ const AdminUserManagement = () => {
     },
     {
       role_name: 'Customer Service Rep',
-      description: 'Handles customer inquiries, processes basic transactions...',
+      description: 'Handles customer inquiries, processes basic transactions and provides support',
       users: 36,
       department: 'Customer Service',
       created: 'Mar 10, 2025',
@@ -70,7 +78,7 @@ const AdminUserManagement = () => {
     },
     {
       role_name: 'Compliance Officer',
-      description: 'Ensures regulatory compliance, monitors suspicious activities...',
+      description: 'Ensures regulatory compliance, monitors suspicious activities and manages risk',
       users: 6,
       department: 'Legal',
       created: 'Feb 22, 2025',
@@ -104,9 +112,9 @@ const AdminUserManagement = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Active':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400">● Active</Badge>;
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400">Active</Badge>;
       case 'Inactive':
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400">● Inactive</Badge>;
+        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400">Inactive</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -122,7 +130,7 @@ const AdminUserManagement = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex w-full">
       <AdminSidebar />
       <div className="flex-1 flex flex-col">
         <AdminHeader />
@@ -151,9 +159,9 @@ const AdminUserManagement = () => {
             </div>
           </div>
 
-          {/* Filters */}
+          {/* Filters Card */}
           <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mb-6">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="flex items-center justify-between space-x-4">
                 <div className="flex items-center space-x-4 flex-1">
                   <div className="relative flex-1 max-w-md">
@@ -170,7 +178,7 @@ const AdminUserManagement = () => {
                     <SelectTrigger className="w-48 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                       <SelectItem value="All Status">All Status</SelectItem>
                       <SelectItem value="Active">Active</SelectItem>
                       <SelectItem value="Inactive">Inactive</SelectItem>
@@ -181,7 +189,7 @@ const AdminUserManagement = () => {
                     <SelectTrigger className="w-48 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                       <SelectItem value="All Departments">All Departments</SelectItem>
                       <SelectItem value="IT">IT</SelectItem>
                       <SelectItem value="Operations">Operations</SelectItem>
@@ -193,6 +201,7 @@ const AdminUserManagement = () => {
                 </div>
 
                 <Button variant="outline" className="text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700">
+                  <Filter className="mr-2 h-4 w-4" />
                   More Filters
                 </Button>
               </div>
@@ -203,55 +212,55 @@ const AdminUserManagement = () => {
           <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-blue-600 text-white">
-                    <tr>
-                      <th className="text-left py-3 px-4 font-medium text-sm">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-blue-600 hover:bg-blue-600">
+                      <TableHead className="text-white font-medium">
                         <input type="checkbox" className="rounded border-blue-400" />
-                      </th>
-                      <th className="text-left py-3 px-4 font-medium text-sm">ROLE NAME</th>
-                      <th className="text-left py-3 px-4 font-medium text-sm">DESCRIPTION</th>
-                      <th className="text-left py-3 px-4 font-medium text-sm">USERS</th>
-                      <th className="text-left py-3 px-4 font-medium text-sm">DEPARTMENT</th>
-                      <th className="text-left py-3 px-4 font-medium text-sm">CREATED</th>
-                      <th className="text-left py-3 px-4 font-medium text-sm">STATUS</th>
-                      <th className="text-left py-3 px-4 font-medium text-sm">ACTIONS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                      </TableHead>
+                      <TableHead className="text-white font-medium">ROLE NAME</TableHead>
+                      <TableHead className="text-white font-medium">DESCRIPTION</TableHead>
+                      <TableHead className="text-white font-medium">USERS</TableHead>
+                      <TableHead className="text-white font-medium">DEPARTMENT</TableHead>
+                      <TableHead className="text-white font-medium">CREATED</TableHead>
+                      <TableHead className="text-white font-medium">STATUS</TableHead>
+                      <TableHead className="text-white font-medium">ACTIONS</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {filteredRoles.map((role, index) => (
-                      <tr key={index} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        <td className="py-4 px-4">
+                      <TableRow key={index} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <TableCell>
                           <input type="checkbox" className="rounded border-gray-300 dark:border-gray-600" />
-                        </td>
-                        <td className="py-4 px-4">
+                        </TableCell>
+                        <TableCell>
                           <span className="font-medium text-gray-900 dark:text-white">{role.role_name}</span>
-                        </td>
-                        <td className="py-4 px-4">
+                        </TableCell>
+                        <TableCell>
                           <span className="text-gray-600 dark:text-gray-400 text-sm">
-                            {role.description.length > 50 ? `${role.description.substring(0, 50)}...` : role.description}
+                            {role.description.length > 60 ? `${role.description.substring(0, 60)}...` : role.description}
                           </span>
-                        </td>
-                        <td className="py-4 px-4">
+                        </TableCell>
+                        <TableCell>
                           <span className="text-gray-900 dark:text-white">{role.users} users</span>
-                        </td>
-                        <td className="py-4 px-4">
+                        </TableCell>
+                        <TableCell>
                           <span className="text-gray-600 dark:text-gray-400">{role.department}</span>
-                        </td>
-                        <td className="py-4 px-4">
+                        </TableCell>
+                        <TableCell>
                           <span className="text-gray-600 dark:text-gray-400">{role.created}</span>
-                        </td>
-                        <td className="py-4 px-4">
+                        </TableCell>
+                        <TableCell>
                           {getStatusBadge(role.status)}
-                        </td>
-                        <td className="py-4 px-4">
+                        </TableCell>
+                        <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                               <DropdownMenuItem>
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Details
@@ -266,15 +275,15 @@ const AdminUserManagement = () => {
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
-                        </td>
-                      </tr>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </tbody>
-                </table>
+                  </TableBody>
+                </Table>
               </div>
 
               {/* Pagination */}
-              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   Showing 1 to 5 of 12 results
                 </div>

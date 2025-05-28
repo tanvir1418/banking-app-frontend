@@ -45,6 +45,7 @@ const AdminHeader = () => {
   };
 
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : 'A';
+  const userFullName = user?.user_metadata?.full_name || user?.email || 'Admin User';
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-4 sticky top-0 z-40">
@@ -90,12 +91,12 @@ const AdminHeader = () => {
                   <AvatarFallback className="bg-blue-600 text-white">{userInitial}</AvatarFallback>
                 </Avatar>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Emma Thompson</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{userFullName}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Administrator</p>
                 </div>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <DropdownMenuLabel>Admin Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>

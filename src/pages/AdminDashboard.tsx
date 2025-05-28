@@ -7,14 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Users, CreditCard, Activity, TrendingUp, Search, MoreHorizontal } from 'lucide-react';
 import AdminHeader from '@/components/admin/AdminHeader';
 import AdminSidebar from '@/components/admin/AdminSidebar';
-import { 
-  ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent 
-} from '@/components/ui/chart';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const AdminDashboard = () => {
   const stats = [
@@ -57,30 +50,19 @@ const AdminDashboard = () => {
   ];
 
   const chartData = [
-    { month: 'Jan', income: 3000, expenses: 2400 },
-    { month: 'Feb', income: 3500, expenses: 2600 },
-    { month: 'Mar', income: 4200, expenses: 2800 },
-    { month: 'Apr', income: 3800, expenses: 3200 },
-    { month: 'May', income: 4500, expenses: 3000 },
-    { month: 'Jun', income: 5200, expenses: 3400 },
-    { month: 'Jul', income: 6100, expenses: 4200 },
-    { month: 'Aug', income: 6200, expenses: 4100 },
-    { month: 'Sep', income: 6000, expenses: 3900 },
-    { month: 'Oct', income: 6800, expenses: 4300 },
-    { month: 'Nov', income: 7200, expenses: 4500 },
-    { month: 'Dec', income: 7500, expenses: 4800 },
+    { month: 'Jan', transactions: 4200, amount: 120000 },
+    { month: 'Feb', transactions: 4800, amount: 135000 },
+    { month: 'Mar', transactions: 5200, amount: 148000 },
+    { month: 'Apr', transactions: 4900, amount: 142000 },
+    { month: 'May', transactions: 5800, amount: 165000 },
+    { month: 'Jun', transactions: 6200, amount: 178000 },
+    { month: 'Jul', transactions: 6800, amount: 195000 },
+    { month: 'Aug', transactions: 7100, amount: 205000 },
+    { month: 'Sep', transactions: 6900, amount: 198000 },
+    { month: 'Oct', transactions: 7500, amount: 215000 },
+    { month: 'Nov', transactions: 8200, amount: 235000 },
+    { month: 'Dec', transactions: 8800, amount: 252000 },
   ];
-
-  const chartConfig = {
-    income: {
-      label: "Income",
-      color: "#3b82f6",
-    },
-    expenses: {
-      label: "Expenses", 
-      color: "#22c55e",
-    },
-  };
 
   const recentUsers = [
     {
@@ -157,11 +139,11 @@ const AdminDashboard = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Active':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400">● Active</Badge>;
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900/20 dark:text-green-400">Active</Badge>;
       case 'Pending':
-        return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400">● Pending</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400">Pending</Badge>;
       case 'Locked':
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400">● Locked</Badge>;
+        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400">Locked</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -179,7 +161,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex w-full">
       <AdminSidebar />
       <div className="flex-1 flex flex-col">
         <AdminHeader />
@@ -239,34 +221,49 @@ const AdminDashboard = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={chartConfig} className="h-64">
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
-                    <XAxis 
-                      dataKey="month" 
-                      className="text-gray-600 dark:text-gray-400"
-                    />
-                    <YAxis className="text-gray-600 dark:text-gray-400" />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <ChartLegend content={<ChartLegendContent />} />
-                    <Line 
-                      type="monotone" 
-                      dataKey="income" 
-                      stroke="#3b82f6" 
-                      strokeWidth={2}
-                      dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
-                      activeDot={{ r: 6, fill: '#3b82f6' }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="expenses" 
-                      stroke="#22c55e" 
-                      strokeWidth={2}
-                      dot={{ fill: '#22c55e', strokeWidth: 2, r: 4 }}
-                      activeDot={{ r: 6, fill: '#22c55e' }}
-                    />
-                  </LineChart>
-                </ChartContainer>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
+                      <XAxis 
+                        dataKey="month" 
+                        className="text-gray-600 dark:text-gray-400"
+                        tick={{ fontSize: 12 }}
+                      />
+                      <YAxis 
+                        className="text-gray-600 dark:text-gray-400"
+                        tick={{ fontSize: 12 }}
+                      />
+                      <Tooltip 
+                        contentStyle={{
+                          backgroundColor: 'white',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                        }}
+                      />
+                      <Legend />
+                      <Line 
+                        type="monotone" 
+                        dataKey="transactions" 
+                        stroke="#3b82f6" 
+                        strokeWidth={3}
+                        dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 6, fill: '#3b82f6' }}
+                        name="Transactions"
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="amount" 
+                        stroke="#22c55e" 
+                        strokeWidth={3}
+                        dot={{ fill: '#22c55e', strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 6, fill: '#22c55e' }}
+                        name="Amount ($)"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </CardContent>
             </Card>
 
