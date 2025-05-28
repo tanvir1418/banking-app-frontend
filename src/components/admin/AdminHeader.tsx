@@ -51,7 +51,7 @@ const AdminHeader = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-6">
           <h2 className="text-lg text-gray-600 dark:text-gray-400">Admin</h2>
-          <span className="text-gray-400 dark:text-gray-500">></span>
+          <span className="text-gray-400 dark:text-gray-500">{'>'}</span>
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">Dashboard</h3>
         </div>
 

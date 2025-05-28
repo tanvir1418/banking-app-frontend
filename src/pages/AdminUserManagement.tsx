@@ -131,9 +131,9 @@ const AdminUserManagement = () => {
           {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
             <span>Dashboard</span>
-            <span>></span>
+            <span>{'>'}</span>
             <span>User Management</span>
-            <span>></span>
+            <span>{'>'}</span>
             <span className="text-gray-900 dark:text-white">Roles</span>
           </div>
 
