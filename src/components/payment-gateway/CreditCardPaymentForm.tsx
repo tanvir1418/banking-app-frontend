@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import CreditCardDisplay from './CreditCardDisplay'; // Import the new display component
+import CreditCardDisplay from './CreditCardDisplay';
 
 interface CheckingAccount {
     id: string;
@@ -27,7 +27,7 @@ interface CreditCardPaymentFormProps {
     checkingAccounts: CheckingAccount[];
     setupAutomaticPayments: boolean;
     setSetupAutomaticPayments: (checked: boolean) => void;
-    onPayNow: () => void; // Added onPayNow prop
+    onPayNow: () => void;
 }
 
 const CreditCardPaymentForm: React.FC<CreditCardPaymentFormProps> = ({
@@ -36,10 +36,10 @@ const CreditCardPaymentForm: React.FC<CreditCardPaymentFormProps> = ({
     checkingAccounts, setupAutomaticPayments, setSetupAutomaticPayments, onPayNow
 }) => {
   return (
-    <Card className="bg-white shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between pb-4"> {/* Adjusted padding */}
-        <CardTitle className="text-xl text-gray-800">Credit Card Payments</CardTitle>
-        <Button variant="link" className="text-sm text-blue-600 p-0 h-auto">Manage Cards</Button>
+    <Card className="bg-card shadow-lg border border-border">
+      <CardHeader className="flex flex-row items-center justify-between pb-4">
+        <CardTitle className="text-xl text-card-foreground">Credit Card Payments</CardTitle>
+        <Button variant="link" className="text-sm text-primary p-0 h-auto hover:text-primary/80">Manage Cards</Button>
       </CardHeader>
       <CardContent className="space-y-6">
         <CreditCardDisplay 
@@ -48,56 +48,56 @@ const CreditCardPaymentForm: React.FC<CreditCardPaymentFormProps> = ({
             expiryDate="05/28"
         />
 
-        <div className="space-y-4 pt-2"> {/* Added pt-2 */}
+        <div className="space-y-4 pt-2">
           <div>
             <div className="flex justify-between items-center mb-1">
-              <Label htmlFor="paymentAmount" className="text-gray-700 font-medium">Payment Amount</Label> {/* Added font-medium */}
+              <Label htmlFor="paymentAmount" className="text-card-foreground font-medium">Payment Amount</Label>
               <div className="flex items-center space-x-2">
                   <Checkbox id="payFullAmount" checked={payFullAmount} onCheckedChange={handlePayFullAmountChange} />
-                  <Label htmlFor="payFullAmount" className="text-xs text-gray-600 font-normal">Pay full amount</Label>
+                  <Label htmlFor="payFullAmount" className="text-xs text-muted-foreground font-normal">Pay full amount</Label>
               </div>
             </div>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
               <Input 
                   id="paymentAmount" 
                   type="number" 
                   value={paymentAmount} 
                   onChange={(e) => setPaymentAmount(e.target.value)} 
-                  className="pl-7 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="pl-7 bg-background border-border text-foreground focus:border-primary focus:ring-primary"
                   disabled={payFullAmount}
               />
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-1.5"> {/* Added mt-1.5 */}
+            <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
               <span>Minimum payment: $35.00</span>
               <span>Due date: May 15, 2025</span>
             </div>
           </div>
 
           <div>
-              <Label className="text-gray-700 mb-2 block font-medium">Payment Method</Label> {/* Added mb-2, font-medium */}
-              <RadioGroup defaultValue="bank" value={paymentMethod} onValueChange={setPaymentMethod} className="flex space-x-6"> {/* Increased space-x */}
+              <Label className="text-card-foreground mb-2 block font-medium">Payment Method</Label>
+              <RadioGroup defaultValue="bank" value={paymentMethod} onValueChange={setPaymentMethod} className="flex space-x-6">
                   <div className="flex items-center space-x-2">
                       <RadioGroupItem value="bank" id="bankAccount" />
-                      <Label htmlFor="bankAccount" className="font-normal text-gray-700">Bank Account</Label>
+                      <Label htmlFor="bankAccount" className="font-normal text-card-foreground">Bank Account</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                       <RadioGroupItem value="debit" id="debitCard" />
-                      <Label htmlFor="debitCard" className="font-normal text-gray-700">Debit Card</Label>
+                      <Label htmlFor="debitCard" className="font-normal text-card-foreground">Debit Card</Label>
                   </div>
               </RadioGroup>
           </div>
           
           {paymentMethod === 'bank' && (
               <div>
-                  <Label htmlFor="checkingAccount" className="text-gray-700 font-medium">Checking Account</Label> {/* Added font-medium */}
+                  <Label htmlFor="checkingAccount" className="text-card-foreground font-medium">Checking Account</Label>
                    <Select value={selectedCheckingAccount} onValueChange={setSelectedCheckingAccount}>
-                      <SelectTrigger id="checkingAccount" className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                      <SelectTrigger id="checkingAccount" className="bg-background border-border text-foreground focus:border-primary focus:ring-primary">
                           <SelectValue placeholder="Select account" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-popover border-border">
                           {checkingAccounts.map(acc => (
-                              <SelectItem key={acc.id} value={acc.id}>
+                              <SelectItem key={acc.id} value={acc.id} className="text-popover-foreground hover:bg-accent hover:text-accent-foreground">
                                   {acc.name} (${acc.balance.toFixed(2)})
                               </SelectItem>
                           ))}
@@ -106,12 +106,12 @@ const CreditCardPaymentForm: React.FC<CreditCardPaymentFormProps> = ({
               </div>
           )}
 
-          <div className="flex items-center space-x-2 pt-3"> {/* Added pt-3 */}
+          <div className="flex items-center space-x-2 pt-3">
               <Checkbox id="autoPay" checked={setupAutomaticPayments} onCheckedChange={setSetupAutomaticPayments}/>
-              <Label htmlFor="autoPay" className="font-normal text-gray-700">Set up automatic payments</Label>
+              <Label htmlFor="autoPay" className="font-normal text-card-foreground">Set up automatic payments</Label>
           </div>
           
-          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-semibold" onClick={onPayNow}> {/* Increased py, text-base, font-semibold */}
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-base font-semibold" onClick={onPayNow}>
               Pay Now
           </Button>
         </div>

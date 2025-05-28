@@ -1,7 +1,7 @@
 
-import React from 'react'; // Removed useState as searchQuery is gone
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, ChevronDown, UserCircle, Settings, LogOut } from 'lucide-react'; // Removed unused CreditCard, Repeat, Briefcase, Search
+import { Bell, ChevronDown, UserCircle, Settings, LogOut, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { useTheme } from '@/contexts/ThemeProvider';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -34,6 +35,7 @@ const DashboardHeader: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
 
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : 'U';
   const userFullName = user?.user_metadata?.full_name || user?.email;
@@ -53,6 +55,10 @@ const DashboardHeader: React.FC = () => {
         description: "You have been successfully logged out.",
       });
     }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   return (
@@ -75,6 +81,11 @@ const DashboardHeader: React.FC = () => {
 
         {/* Right Aligned Icons & User Dropdown */}
         <div className="flex items-center space-x-4">
+          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={toggleTheme}>
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+
           <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
             <Bell className="h-6 w-6" />
             <span className="sr-only">Notifications</span>

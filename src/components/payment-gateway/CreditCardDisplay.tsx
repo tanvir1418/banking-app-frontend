@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { CreditCard as CreditCardIconLucide } from 'lucide-react'; // Renamed to avoid conflict
+import { CreditCard as CreditCardIconLucide } from 'lucide-react';
 
 interface CreditCardDisplayProps {
-  cardType?: string; // e.g. "Credit", "Visa"
+  cardType?: string;
   lastFourDigits: string;
   cardHolderName: string;
-  expiryDate: string; // MM/YY
+  expiryDate: string;
 }
 
 const CreditCardDisplay: React.FC<CreditCardDisplayProps> = ({
@@ -16,20 +16,19 @@ const CreditCardDisplay: React.FC<CreditCardDisplayProps> = ({
   expiryDate,
 }) => {
   return (
-    <div className="p-5 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-xl relative overflow-hidden"> {/* Increased padding, rounded-xl, shadow-xl */}
-      {/* Background pattern (optional) */}
+    <div className="p-5 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-xl relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 mix-blend-overlay">
-        {/* You can add an SVG pattern here if desired */}
+        {/* Background pattern */}
       </div>
-      <div className="flex justify-between items-start mb-6"> {/* Increased mb */}
-          <span className="text-sm font-medium tracking-wide">{cardType}</span> {/* Added tracking-wide */}
-          <CreditCardIconLucide className="h-7 w-7 opacity-80" /> {/* Increased size, opacity */}
+      <div className="flex justify-between items-start mb-6">
+          <span className="text-sm font-medium tracking-wide">{cardType}</span>
+          <CreditCardIconLucide className="h-7 w-7 opacity-80" />
       </div>
-      <p className="text-2xl font-mono tracking-wider mb-4">**** **** **** {lastFourDigits}</p> {/* Increased size, mb */}
+      <p className="text-2xl font-mono tracking-wider mb-4">**** **** **** {lastFourDigits}</p>
       <div className="flex justify-between items-end text-xs">
           <div>
-              <p className="opacity-75 uppercase text-[0.65rem] tracking-wider">Card Holder</p> {/* Uppercase, smaller, tracking */}
-              <p className="font-medium text-sm">{cardHolderName}</p> {/* font-medium, text-sm */}
+              <p className="opacity-75 uppercase text-[0.65rem] tracking-wider">Card Holder</p>
+              <p className="font-medium text-sm">{cardHolderName}</p>
           </div>
           <div>
               <p className="opacity-75 uppercase text-[0.65rem] tracking-wider">Expires</p>
