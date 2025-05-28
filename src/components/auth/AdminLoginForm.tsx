@@ -1,0 +1,203 @@
+
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, Shield, User, Lock } from 'lucide-react';
+
+const adminLoginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address." }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+});
+
+interface AdminLoginFormProps {
+  onSwitchToUser: () => void;
+}
+
+const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onSwitchToUser }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const form = useForm<z.infer<typeof adminLoginSchema>>({
+    resolver: zodResolver(adminLoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof adminLoginSchema>) => {
+    setLoading(true);
+    try {
+      console.log('Admin login attempt for:', values.email);
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (error) {
+        console.error('Admin login error:', error);
+        toast({
+          title: 'Admin Login Failed',
+          description: error.message,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (data.user) {
+        console.log('Admin login successful, checking role...');
+        
+        // Wait a moment for the auth state to update
+        setTimeout(async () => {
+          try {
+            const { data: roleData, error: roleError } = await supabase
+              .from('user_roles')
+              .select('role')
+              .eq('user_id', data.user.id)
+              .single();
+
+            console.log('Role check result:', roleData, roleError);
+
+            if (roleError) {
+              toast({
+                title: 'Role Check Failed',
+                description: 'Could not verify admin status',
+                variant: 'destructive',
+              });
+              return;
+            }
+
+            if (roleData?.role === 'admin') {
+              console.log('Admin role confirmed, redirecting to admin dashboard');
+              toast({
+                title: 'Admin Login Successful',
+                description: 'Welcome to the admin dashboard!',
+              });
+              navigate('/admin', { replace: true });
+            } else {
+              console.log('User does not have admin role:', roleData?.role);
+              toast({
+                title: 'Access Denied',
+                description: 'You do not have administrator privileges.',
+                variant: 'destructive',
+              });
+              await supabase.auth.signOut();
+            }
+          } catch (roleCheckError) {
+            console.error('Error checking role:', roleCheckError);
+            toast({
+              title: 'Error',
+              description: 'Failed to verify admin status',
+              variant: 'destructive',
+            });
+          }
+        }, 1000);
+      }
+    } catch (error: any) {
+      console.error('Admin login exception:', error);
+      toast({
+        title: 'Admin Login Error',
+        description: error.message || 'An unexpected error occurred.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-md bg-card text-card-foreground shadow-xl dark:shadow-2xl rounded-lg border-2 border-red-200 dark:border-red-800">
+      <CardHeader className="text-center">
+        <div className="flex items-center justify-center mb-2">
+          <Shield className="h-8 w-8 text-red-600 dark:text-red-400" />
+        </div>
+        <CardTitle className="text-2xl font-bold text-red-600 dark:text-red-400">Administrator Login</CardTitle>
+        <CardDescription className="text-muted-foreground">Sign in with admin credentials</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground">Admin Email</FormLabel>
+                  <FormControl>
+                    <div className="relative flex items-center">
+                      <User className="absolute left-3 h-5 w-5 text-muted-foreground" />
+                      <Input 
+                        placeholder="Enter admin email" 
+                        {...field} 
+                        className="pl-10 bg-background text-card-foreground placeholder:text-muted-foreground"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-muted-foreground">Admin Password</FormLabel>
+                  <FormControl>
+                    <div className="relative flex items-center">
+                      <Lock className="absolute left-3 h-5 w-5 text-muted-foreground" />
+                      <Input 
+                        type={showPassword ? 'text' : 'password'} 
+                        placeholder="Enter admin password" 
+                        {...field} 
+                        className="pl-10 bg-background text-card-foreground placeholder:text-muted-foreground"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-accent-foreground"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white dark:bg-red-500 dark:hover:bg-red-600" disabled={loading}>
+              {loading ? 'Signing In as Admin...' : 'Sign In as Administrator'}
+            </Button>
+          </form>
+        </Form>
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Not an administrator?{' '}
+          <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" onClick={onSwitchToUser} disabled={loading}>
+            User Login
+          </Button>
+        </p>
+        <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-800">
+          <p className="text-xs text-red-600 dark:text-red-400 text-center">
+            <Shield className="inline h-3 w-3 mr-1" />
+            Administrator access only. Unauthorized access is prohibited.
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default AdminLoginForm;

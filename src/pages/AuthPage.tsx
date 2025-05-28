@@ -2,11 +2,27 @@
 import React, { useState } from 'react';
 import LoginForm from '@/components/auth/LoginForm';
 import RegistrationForm from '@/components/auth/RegistrationForm';
+import AdminLoginForm from '@/components/auth/AdminLoginForm';
 import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Shield, User } from 'lucide-react';
+
+type AuthView = 'login' | 'register' | 'admin';
 
 const AuthPage = () => {
-  const [isLoginView, setIsLoginView] = useState(true);
+  const [currentView, setCurrentView] = useState<AuthView>('login');
+
+  const renderAuthForm = () => {
+    switch (currentView) {
+      case 'login':
+        return <LoginForm onSwitchToRegister={() => setCurrentView('register')} />;
+      case 'register':
+        return <RegistrationForm onSwitchToLogin={() => setCurrentView('login')} />;
+      case 'admin':
+        return <AdminLoginForm onSwitchToUser={() => setCurrentView('login')} />;
+      default:
+        return <LoginForm onSwitchToRegister={() => setCurrentView('register')} />;
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-sky-100 via-blue-200 to-indigo-300 dark:from-sky-800 dark:via-blue-900 dark:to-indigo-950 text-foreground">
@@ -21,13 +37,39 @@ const AuthPage = () => {
         </div>
       </header>
 
+      {/* Navigation Tabs */}
+      <div className="flex justify-center p-4">
+        <div className="flex bg-background/80 dark:bg-background/70 backdrop-blur-md rounded-lg p-1 shadow-sm">
+          <Button
+            variant={currentView === 'login' ? 'default' : 'ghost'}
+            onClick={() => setCurrentView('login')}
+            className="flex items-center space-x-2"
+          >
+            <User className="h-4 w-4" />
+            <span>User Login</span>
+          </Button>
+          <Button
+            variant={currentView === 'register' ? 'default' : 'ghost'}
+            onClick={() => setCurrentView('register')}
+            className="flex items-center space-x-2"
+          >
+            <User className="h-4 w-4" />
+            <span>Register</span>
+          </Button>
+          <Button
+            variant={currentView === 'admin' ? 'destructive' : 'ghost'}
+            onClick={() => setCurrentView('admin')}
+            className="flex items-center space-x-2"
+          >
+            <Shield className="h-4 w-4" />
+            <span>Admin</span>
+          </Button>
+        </div>
+      </div>
+
       {/* Main Content */}
       <main className="flex-grow flex flex-col items-center justify-center p-4">
-        {isLoginView ? (
-          <LoginForm onSwitchToRegister={() => setIsLoginView(false)} />
-        ) : (
-          <RegistrationForm onSwitchToLogin={() => setIsLoginView(true)} />
-        )}
+        {renderAuthForm()}
       </main>
 
       {/* Footer */}
