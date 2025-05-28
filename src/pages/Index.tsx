@@ -4,20 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
-  const { session, isLoading } = useAuth();
+  const { session, isLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoading) {
       if (session) {
-        navigate('/dashboard', { replace: true });
+        if (isAdmin) {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate('/dashboard', { replace: true });
+        }
       } else {
         navigate('/auth', { replace: true });
       }
     }
-  }, [session, isLoading, navigate]);
+  }, [session, isLoading, isAdmin, navigate]);
 
-  // Show a loading state or a brief message while redirecting
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="text-center">
