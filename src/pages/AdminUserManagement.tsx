@@ -23,6 +23,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import AdminHeader from '@/components/admin/AdminHeader';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import { supabase } from '@/integrations/supabase/client';
@@ -135,9 +136,9 @@ const AdminUserManagement = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Active':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>;
+        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-100">Active</Badge>;
       case 'Inactive':
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Inactive</Badge>;
+        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900 dark:text-red-100">Inactive</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -164,7 +165,7 @@ const AdminUserManagement = () => {
 
   if (showRoleDetails && selectedRole) {
     return (
-      <div className="min-h-screen bg-gray-50 flex w-full">
+      <div className="min-h-screen bg-background flex w-full">
         <AdminSidebar />
         <div className="flex-1 flex flex-col">
           <AdminHeader />
@@ -174,12 +175,12 @@ const AdminUserManagement = () => {
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-4">
-                  <Button variant="ghost" onClick={handleCloseRoleDetails} className="text-gray-600">
+                  <Button variant="ghost" onClick={handleCloseRoleDetails} className="text-muted-foreground">
                     <X className="w-4 h-4 mr-2" />
                     Cancel
                   </Button>
                   <div>
-                    <h1 className="text-xl font-semibold text-gray-900">Role Details: {selectedRole.role_name}</h1>
+                    <h1 className="text-xl font-semibold text-foreground">Role Details: {selectedRole.role_name}</h1>
                   </div>
                 </div>
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -188,10 +189,10 @@ const AdminUserManagement = () => {
               </div>
 
               {/* Role Details Card */}
-              <Card className="bg-white border border-gray-200">
+              <Card className="bg-card border-border">
                 <CardContent className="p-6">
                   <Tabs defaultValue="basic-information" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4 mb-6">
+                    <TabsList className="grid w-full grid-cols-4 mb-6 bg-muted">
                       <TabsTrigger value="basic-information">Basic Information</TabsTrigger>
                       <TabsTrigger value="permissions">Permissions</TabsTrigger>
                       <TabsTrigger value="users">Users (8)</TabsTrigger>
@@ -201,27 +202,27 @@ const AdminUserManagement = () => {
                     <TabsContent value="basic-information" className="mt-6">
                       <div className="grid grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Role Name</label>
-                          <Input value={selectedRole.role_name} className="w-full" />
+                          <Label className="block text-sm font-medium text-foreground mb-2">Role Name</Label>
+                          <Input value={selectedRole.role_name} className="w-full bg-background border-border" />
                         </div>
                         <div className="flex items-center space-x-4">
-                          <label className="block text-sm font-medium text-gray-700">Status</label>
+                          <Label className="block text-sm font-medium text-foreground">Status</Label>
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm text-gray-600">Active</span>
+                            <span className="text-sm text-muted-foreground">Active</span>
                             <Switch checked={true} />
                           </div>
                         </div>
                         <div className="col-span-2">
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                          <Input value={selectedRole.description} className="w-full" />
+                          <Label className="block text-sm font-medium text-foreground mb-2">Description</Label>
+                          <Input value={selectedRole.description} className="w-full bg-background border-border" />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                          <Label className="block text-sm font-medium text-foreground mb-2">Department</Label>
                           <Select defaultValue={selectedRole.department}>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-background border-border">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-popover border-border">
                               <SelectItem value="IT">IT</SelectItem>
                               <SelectItem value="Operations">Operations</SelectItem>
                               <SelectItem value="Finance">Finance</SelectItem>
@@ -233,23 +234,23 @@ const AdminUserManagement = () => {
                       </div>
                       
                       <div className="mt-8">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">Role Permissions</h3>
+                        <h3 className="text-lg font-medium text-foreground mb-4">Role Permissions</h3>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="flex items-center space-x-2">
                             <Checkbox id="full-admin" checked />
-                            <label htmlFor="full-admin" className="text-sm text-blue-600">Full Administrative Access</label>
+                            <Label htmlFor="full-admin" className="text-sm text-blue-600 dark:text-blue-400">Full Administrative Access</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox id="user-mgmt" checked />
-                            <label htmlFor="user-mgmt" className="text-sm text-blue-600">User Management</label>
+                            <Label htmlFor="user-mgmt" className="text-sm text-blue-600 dark:text-blue-400">User Management</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox id="transaction-approval" checked />
-                            <label htmlFor="transaction-approval" className="text-sm text-blue-600">Transaction Approval (Any Amount)</label>
+                            <Label htmlFor="transaction-approval" className="text-sm text-blue-600 dark:text-blue-400">Transaction Approval (Any Amount)</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox id="system-config" checked />
-                            <label htmlFor="system-config" className="text-sm text-blue-600">System Configuration</label>
+                            <Label htmlFor="system-config" className="text-sm text-blue-600 dark:text-blue-400">System Configuration</Label>
                           </div>
                         </div>
                       </div>
@@ -258,7 +259,7 @@ const AdminUserManagement = () => {
                     <TabsContent value="permissions" className="mt-6">
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-medium text-gray-900">Detailed Permission Matrix</h3>
+                          <h3 className="text-lg font-medium text-foreground">Detailed Permission Matrix</h3>
                           <div className="flex space-x-2">
                             <Button variant="outline" size="sm">Expand All</Button>
                             <Button variant="outline" size="sm">Collapse All</Button>
@@ -267,10 +268,10 @@ const AdminUserManagement = () => {
                         
                         <div className="flex items-center space-x-2 mb-4">
                           <Checkbox id="select-all" />
-                          <label htmlFor="select-all" className="text-sm font-medium text-gray-700">Select All Permissions</label>
+                          <Label htmlFor="select-all" className="text-sm font-medium text-foreground">Select All Permissions</Label>
                         </div>
 
-                        <div className="border border-gray-200 rounded-lg overflow-hidden">
+                        <div className="border border-border rounded-lg overflow-hidden">
                           <Table>
                             <TableHeader className="bg-blue-600">
                               <TableRow className="border-none hover:bg-blue-600">
@@ -284,13 +285,13 @@ const AdminUserManagement = () => {
                             </TableHeader>
                             <TableBody>
                               {permissions.map((permission, index) => (
-                                <TableRow key={index} className="border-b border-gray-100">
+                                <TableRow key={index} className="border-b border-border">
                                   <TableCell className="py-3 px-4">
                                     <div className={`${permission.submodule ? 'ml-6' : ''}`}>
                                       {permission.submodule ? (
-                                        <span className="text-sm text-gray-600">{permission.submodule}</span>
+                                        <span className="text-sm text-muted-foreground">{permission.submodule}</span>
                                       ) : (
-                                        <span className="font-medium text-gray-900">{permission.module}</span>
+                                        <span className="font-medium text-foreground">{permission.module}</span>
                                       )}
                                     </div>
                                   </TableCell>
@@ -319,13 +320,13 @@ const AdminUserManagement = () => {
 
                     <TabsContent value="users" className="mt-6">
                       <div className="text-center py-8">
-                        <p className="text-gray-500">Users assigned to this role will be displayed here.</p>
+                        <p className="text-muted-foreground">Users assigned to this role will be displayed here.</p>
                       </div>
                     </TabsContent>
 
                     <TabsContent value="activity-log" className="mt-6">
                       <div className="text-center py-8">
-                        <p className="text-gray-500">Activity log for this role will be displayed here.</p>
+                        <p className="text-muted-foreground">Activity log for this role will be displayed here.</p>
                       </div>
                     </TabsContent>
                   </Tabs>
@@ -339,18 +340,25 @@ const AdminUserManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex w-full">
+    <div className="min-h-screen bg-background flex w-full">
       <AdminSidebar />
       <div className="flex-1 flex flex-col">
         <AdminHeader />
         
         <main className="flex-1 p-6">
+          {/* Breadcrumb */}
+          <div className="mb-4">
+            <nav className="text-sm text-muted-foreground">
+              Dashboard &gt; User Management &gt; Roles
+            </nav>
+          </div>
+
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900 mb-1">User Role Management</h1>
-                <p className="text-sm text-gray-500">Create and manage user roles and permissions</p>
+                <h1 className="text-2xl font-semibold text-foreground mb-1">User Role Management</h1>
+                <p className="text-sm text-muted-foreground">Create and manage user roles and permissions</p>
               </div>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="mr-2 h-4 w-4" />
@@ -363,20 +371,20 @@ const AdminUserManagement = () => {
           <div className="flex items-center justify-between mb-6 space-x-4">
             <div className="flex items-center space-x-4 flex-1">
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search roles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-background border-border"
                 />
               </div>
               
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-48 bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="All Status">All Status</SelectItem>
                   <SelectItem value="Active">Active</SelectItem>
                   <SelectItem value="Inactive">Inactive</SelectItem>
@@ -384,10 +392,10 @@ const AdminUserManagement = () => {
               </Select>
 
               <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-48 bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="All Departments">All Departments</SelectItem>
                   <SelectItem value="IT">IT</SelectItem>
                   <SelectItem value="Operations">Operations</SelectItem>
@@ -398,19 +406,19 @@ const AdminUserManagement = () => {
               </Select>
             </div>
 
-            <Button variant="outline">
+            <Button variant="outline" className="border-border">
               <Filter className="mr-2 h-4 w-4" />
               More Filters
             </Button>
           </div>
 
           {/* Roles Table */}
-          <Card className="bg-white border border-gray-200">
+          <Card className="bg-card border-border">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-blue-600 hover:bg-blue-600">
+                    <TableRow className="bg-blue-600 hover:bg-blue-600 border-none">
                       <TableHead className="text-white font-medium">
                         <Checkbox />
                       </TableHead>
@@ -427,28 +435,28 @@ const AdminUserManagement = () => {
                     {filteredRoles.map((role, index) => (
                       <TableRow 
                         key={index} 
-                        className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                        className="border-b border-border hover:bg-muted/50 cursor-pointer"
                         onClick={() => handleRoleClick(role)}
                       >
                         <TableCell onClick={(e) => e.stopPropagation()}>
                           <Checkbox />
                         </TableCell>
                         <TableCell>
-                          <span className="font-medium text-gray-900">{role.role_name}</span>
+                          <span className="font-medium text-foreground">{role.role_name}</span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-600 text-sm">
+                          <span className="text-muted-foreground text-sm">
                             {role.description.length > 60 ? `${role.description.substring(0, 60)}...` : role.description}
                           </span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-900">{role.users} users</span>
+                          <span className="text-foreground">{role.users} users</span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-600">{role.department}</span>
+                          <span className="text-muted-foreground">{role.department}</span>
                         </TableCell>
                         <TableCell>
-                          <span className="text-gray-600">{role.created}</span>
+                          <span className="text-muted-foreground">{role.created}</span>
                         </TableCell>
                         <TableCell>
                           {getStatusBadge(role.status)}
@@ -456,20 +464,20 @@ const AdminUserManagement = () => {
                         <TableCell onClick={(e) => e.stopPropagation()}>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+                              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
+                            <DropdownMenuContent align="end" className="bg-popover border-border">
+                              <DropdownMenuItem className="text-popover-foreground">
                                 <Eye className="mr-2 h-4 w-4" />
                                 View Details
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem className="text-popover-foreground">
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit Role
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">
+                              <DropdownMenuItem className="text-red-600 dark:text-red-400">
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Delete Role
                               </DropdownMenuItem>
@@ -483,20 +491,20 @@ const AdminUserManagement = () => {
               </div>
 
               {/* Pagination */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-                <div className="text-sm text-gray-500">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+                <div className="text-sm text-muted-foreground">
                   Showing 1 to 5 of 12 results
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm" disabled className="text-gray-400">
+                  <Button variant="outline" size="sm" disabled className="text-muted-foreground border-border">
                     Previous
                   </Button>
                   <Button size="sm" className="bg-blue-600 text-white">1</Button>
-                  <Button variant="outline" size="sm" className="text-gray-600">2</Button>
-                  <Button variant="outline" size="sm" className="text-gray-600">3</Button>
-                  <span className="text-gray-500">...</span>
-                  <Button variant="outline" size="sm" className="text-gray-600">8</Button>
-                  <Button variant="outline" size="sm" className="text-gray-600">
+                  <Button variant="outline" size="sm" className="text-muted-foreground border-border">2</Button>
+                  <Button variant="outline" size="sm" className="text-muted-foreground border-border">3</Button>
+                  <span className="text-muted-foreground">...</span>
+                  <Button variant="outline" size="sm" className="text-muted-foreground border-border">8</Button>
+                  <Button variant="outline" size="sm" className="text-muted-foreground border-border">
                     Next
                   </Button>
                 </div>
