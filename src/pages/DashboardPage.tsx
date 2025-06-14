@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import SidebarNav from '@/components/dashboard/SidebarNav';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import DashboardFooter from '@/components/dashboard/DashboardFooter';
@@ -11,10 +11,12 @@ import BudgetTracker from '@/components/dashboard/BudgetTracker';
 import UpcomingPayments from '@/components/dashboard/UpcomingPayments';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react'; // Added for button icon
+import { Input } from '@/components/ui/input';
+import { PlusCircle, Search } from 'lucide-react';
 
 const DashboardPage = () => {
   const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState('');
   const firstName = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'User';
 
   const currentTime = new Date();
@@ -34,6 +36,11 @@ const DashboardPage = () => {
     hour: 'numeric', minute: 'numeric', hour12: true 
   }).format(lastLoginDateRaw);
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Searching for:', searchQuery);
+    // TODO: Implement search functionality
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -49,16 +56,31 @@ const DashboardPage = () => {
             </p>
           </section>
 
+          {/* Search Bar */}
+          <section>
+            <form onSubmit={handleSearch} className="max-w-md">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Search transactions, accounts, or payments..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-full bg-card border-border focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </form>
+          </section>
+
           {/* Account Summaries */}
           <AccountSummary />
           
           {/* New Transaction Button */}
           <div className="flex justify-end">
-            <Button variant="default"> {/* Use default themed button */}
+            <Button variant="default">
                 <PlusCircle className="mr-2 h-4 w-4" /> New Transaction
             </Button>
           </div>
-
 
           {/* Transactions and Quick Actions */}
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
