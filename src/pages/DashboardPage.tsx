@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import SidebarNav from '@/components/dashboard/SidebarNav';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import DashboardFooter from '@/components/dashboard/DashboardFooter';
@@ -9,6 +8,7 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import SpendingAnalysis from '@/components/dashboard/SpendingAnalysis';
 import BudgetTracker from '@/components/dashboard/BudgetTracker';
 import UpcomingPayments from '@/components/dashboard/UpcomingPayments';
+import SearchResults from '@/components/dashboard/SearchResults';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +18,85 @@ const DashboardPage = () => {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const firstName = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'User';
+
+  // Sample data for search functionality
+  const searchData = useMemo(() => [
+    // Transactions
+    {
+      id: '1',
+      type: 'transaction' as const,
+      title: 'Netflix Subscription',
+      description: 'Monthly subscription payment',
+      amount: -15.99,
+      date: '2024-01-15',
+      status: 'Completed'
+    },
+    {
+      id: '2',
+      type: 'transaction' as const,
+      title: 'Spotify Premium',
+      description: 'Music streaming service',
+      amount: -9.99,
+      date: '2024-01-14',
+      status: 'Completed'
+    },
+    {
+      id: '3',
+      type: 'transaction' as const,
+      title: 'Grocery Store',
+      description: 'Weekly groceries',
+      amount: -127.45,
+      date: '2024-01-13',
+      status: 'Completed'
+    },
+    // Accounts
+    {
+      id: '4',
+      type: 'account' as const,
+      title: 'Checking Account',
+      description: 'Primary checking account',
+      amount: 2543.67,
+      status: 'Active'
+    },
+    {
+      id: '5',
+      type: 'account' as const,
+      title: 'Savings Account',
+      description: 'High-yield savings account',
+      amount: 15432.21,
+      status: 'Active'
+    },
+    // Payments
+    {
+      id: '6',
+      type: 'payment' as const,
+      title: 'Electric Bill',
+      description: 'Monthly electricity payment',
+      amount: -89.34,
+      date: '2024-01-16',
+      status: 'Pending'
+    },
+    {
+      id: '7',
+      type: 'payment' as const,
+      title: 'Internet Bill',
+      description: 'Monthly internet service',
+      amount: -65.00,
+      date: '2024-01-18',
+      status: 'Scheduled'
+    }
+  ], []);
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    
+    const query = searchQuery.toLowerCase();
+    return searchData.filter(item => 
+      item.title.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      item.type.toLowerCase().includes(query)
+    );
+  }, [searchQuery, searchData]);
 
   const currentTime = new Date();
   const currentHour = currentTime.getHours();
@@ -39,7 +118,10 @@ const DashboardPage = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Searching for:', searchQuery);
-    // TODO: Implement search functionality
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
   };
 
   return (
@@ -72,34 +154,48 @@ const DashboardPage = () => {
             </form>
           </section>
 
-          {/* Account Summaries */}
-          <AccountSummary />
-          
-          {/* New Transaction Button */}
-          <div className="flex justify-end">
-            <Button variant="default">
-                <PlusCircle className="mr-2 h-4 w-4" /> New Transaction
-            </Button>
-          </div>
+          {/* Search Results */}
+          {searchQuery && (
+            <SearchResults 
+              query={searchQuery}
+              results={searchResults}
+              onClearSearch={handleClearSearch}
+            />
+          )}
 
-          {/* Transactions and Quick Actions */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <RecentTransactions />
-            </div>
-            <div>
-              <QuickActions />
-            </div>
-          </section>
+          {/* Only show dashboard content when not searching */}
+          {!searchQuery && (
+            <>
+              {/* Account Summaries */}
+              <AccountSummary />
+              
+              {/* New Transaction Button */}
+              <div className="flex justify-end">
+                <Button variant="default">
+                    <PlusCircle className="mr-2 h-4 w-4" /> New Transaction
+                </Button>
+              </div>
 
-          {/* Spending Analysis */}
-          <SpendingAnalysis />
+              {/* Transactions and Quick Actions */}
+              <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                  <RecentTransactions />
+                </div>
+                <div>
+                  <QuickActions />
+                </div>
+              </section>
 
-          {/* Budget Tracker and Upcoming Payments */}
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <BudgetTracker />
-            <UpcomingPayments />
-          </section>
+              {/* Spending Analysis */}
+              <SpendingAnalysis />
+
+              {/* Budget Tracker and Upcoming Payments */}
+              <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <BudgetTracker />
+                <UpcomingPayments />
+              </section>
+            </>
+          )}
 
         </main>
         <DashboardFooter />
