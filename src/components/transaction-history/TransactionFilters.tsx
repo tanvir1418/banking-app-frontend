@@ -6,10 +6,15 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { exportTransactionsToPDF } from '@/utils/pdfExport';
 
 const TransactionFilters: React.FC = () => {
   const [fromDate, setFromDate] = useState<Date | undefined>(new Date('2025-04-06'));
   const [toDate, setToDate] = useState<Date | undefined>(new Date('2025-05-06'));
+
+  const handleExport = () => {
+    exportTransactionsToPDF(fromDate, toDate);
+  };
 
   return (
     <Card className="p-4 shadow-md bg-card">
@@ -40,7 +45,7 @@ const TransactionFilters: React.FC = () => {
           <label htmlFor="search" className="block text-sm font-medium text-card-foreground mb-1">Search</label>
           <Input id="search" placeholder="Search transactions..." />
         </div>
-        <Button variant="outline" className="w-full lg:w-auto flex items-center gap-2">
+        <Button variant="outline" className="w-full lg:w-auto flex items-center gap-2" onClick={handleExport}>
           <Download className="h-4 w-4" />
           Export
         </Button>
