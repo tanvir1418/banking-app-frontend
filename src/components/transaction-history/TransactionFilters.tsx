@@ -11,9 +11,10 @@ import { exportTransactionsToPDF } from '@/utils/pdfExport';
 const TransactionFilters: React.FC = () => {
   const [fromDate, setFromDate] = useState<Date | undefined>(new Date('2025-04-06'));
   const [toDate, setToDate] = useState<Date | undefined>(new Date('2025-05-06'));
+  const [selectedType, setSelectedType] = useState<string>('all');
 
   const handleExport = () => {
-    exportTransactionsToPDF(fromDate, toDate);
+    exportTransactionsToPDF(fromDate, toDate, selectedType);
   };
 
   return (
@@ -29,7 +30,7 @@ const TransactionFilters: React.FC = () => {
         </div>
         <div>
           <label htmlFor="type" className="block text-sm font-medium text-card-foreground mb-1">Type</label>
-          <Select defaultValue="all">
+          <Select value={selectedType} onValueChange={setSelectedType}>
             <SelectTrigger>
               <SelectValue placeholder="All Transactions" />
             </SelectTrigger>
