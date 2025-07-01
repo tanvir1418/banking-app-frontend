@@ -1,137 +1,111 @@
-
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Session, User, AuthError } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { api } from '@/lib/api';
+import { AuthResponse, LoginInput, RegisterInput } from '@/types/auth';
 
 interface AuthContextType {
-  session: Session | null;
-  user: User | null;
+  isAuthenticated: boolean;
+  user: AuthResponse['user'] | null;
   userRole: string | null;
-  isLoading: boolean;
   isAdmin: boolean;
-  signOut: () => Promise<AuthError | null>;
-  refreshUserRole: () => Promise<void>;
+  token: string | null;
+  isLoading: boolean;
+  login: (data: LoginInput) => Promise<void>;
+  register: (data: RegisterInput) => Promise<void>;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<AuthResponse['user'] | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem('token')
+  );
   const [isLoading, setIsLoading] = useState(true);
 
+  const isAuthenticated = !!token;
   const isAdmin = userRole === 'admin';
 
-  const fetchUserRole = async (userId: string) => {
-    try {
-      console.log('Fetching role for user:', userId);
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .single();
-      
-      if (error) {
-        console.error('Error fetching user role:', error);
-        return null;
-      }
-      
-      console.log('User role data:', data);
-      return data?.role || null;
-    } catch (error) {
-      console.error('Error in fetchUserRole:', error);
-      return null;
-    }
-  };
-
-  const refreshUserRole = async () => {
-    if (user) {
-      const role = await fetchUserRole(user.id);
-      console.log('Refreshed user role:', role);
-      setUserRole(role);
-    }
-  };
-
   useEffect(() => {
-    setIsLoading(true);
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      console.log('Initial session:', session);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        const role = await fetchUserRole(session.user.id);
-        console.log('Initial user role:', role);
-        setUserRole(role);
-      } else {
-        setUserRole(null);
+    const fetchUser = async () => {
+      if (!token) {
+        setIsLoading(false);
+        return;
       }
-      
-      setIsLoading(false);
-      console.log("AuthContext: getSession completed", session);
-    }).catch(error => {
-      console.error("AuthContext: error in getSession", error);
-      setIsLoading(false);
-    });
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        console.log("AuthContext: onAuthStateChange triggered", _event, session);
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Add a small delay to ensure the user_roles trigger has executed
-          setTimeout(async () => {
-            const role = await fetchUserRole(session.user.id);
-            console.log('Auth state change - user role:', role);
-            setUserRole(role);
-            setIsLoading(false);
-          }, 500);
-        } else {
-          setUserRole(null);
-          setIsLoading(false);
-        }
+      try {
+        const res = await api.get('/common/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(res.data.user);
+        setUserRole(res.data.user.role);
+      } catch (err) {
+        console.error('Session expired');
+        logout(); // auto logout if invalid
+      } finally {
+        setIsLoading(false);
       }
-    );
-
-    return () => {
-      authListener?.subscription.unsubscribe();
     };
-  }, []);
 
-  const signOut = async (): Promise<AuthError | null> => {
-    console.log("AuthContext: signOut called");
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("AuthContext: error signing out", error);
-    } else {
-      setSession(null);
-      setUser(null);
-      setUserRole(null);
-      console.log("AuthContext: signOut successful");
-    }
-    return error;
+    fetchUser();
+  }, [token]);
+
+  const login = async ({ email, password }: LoginInput) => {
+    const res = await api.post<AuthResponse>('/public/login', {
+      email,
+      password,
+    });
+    localStorage.setItem('token', res.data.token);
+    setToken(res.data.token);
+    setUser(res.data.user);
+    setUserRole(res.data.user.role);
   };
 
-  const value = {
-    session,
-    user,
-    userRole,
-    isLoading,
-    isAdmin,
-    signOut,
-    refreshUserRole,
+  const register = async ({
+    email,
+    password,
+    confirmPassword,
+  }: RegisterInput) => {
+    const res = await api.post<AuthResponse>('/public/register', {
+      email,
+      password,
+      confirmPassword,
+    });
+    localStorage.setItem('token', res.data.token);
+    setToken(res.data.token);
+    setUser(res.data.user);
+    setUserRole(res.data.user.role);
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const logout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+    setUser(null);
+    setUserRole(null);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        userRole,
+        isAdmin,
+        token,
+        isAuthenticated,
+        login,
+        register,
+        logout,
+        isLoading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 };
