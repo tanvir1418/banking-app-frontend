@@ -59,17 +59,22 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onSwitchToUser }) => {
         password: values.password,
       });
 
-      localStorage.setItem('token', res.data.token);
-      setToken(res.data.token);
-      setUser(res.data.user);
-      setUserRole(res.data.user.role);
-
       if (res.data.user.role === 'admin') {
+        localStorage.setItem('token', res.data.token);
+        setToken(res.data.token);
+        setUser(res.data.user);
+        setUserRole(res.data.user.role);
+
         toast.success('Admin Login Successful', {
           description: 'Welcome to the admin dashboard!',
         });
         navigate('/admin', { replace: true });
       } else {
+        localStorage.removeItem('token');
+        setToken(null);
+        setUser(null);
+        setUserRole(null);
+
         toast.error('Access Denied', {
           description: 'You are not an administrator.',
         });
