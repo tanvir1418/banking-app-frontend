@@ -4,14 +4,18 @@ import { Toaster } from 'sonner';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeProvider';
 import { QueryClient } from '@/contexts/QueryContext';
+
+import ProtectedRoute from '@/components/ProtectedRoute';
+import RedirectIfAuthenticated from '@/components/RedirectIfAuthenticated';
+import AdminRoute from '@/components/AdminRoute';
+
 import Index from '@/pages/Index';
 import AuthPage from '@/pages/AuthPage';
 import DashboardPage from '@/pages/DashboardPage';
 import DashboardAccountsPage from '@/pages/DashboardAccountsPage';
 import DashboardSupportPage from '@/pages/DashboardSupportPage';
-import ProtectedRoute from '@/components/ProtectedRoute';
+
 import NotFound from '@/pages/NotFound';
-import AdminRoute from '@/components/AdminRoute';
 import AdminDashboard from '@/pages/AdminDashboard';
 import FundTransferPage from '@/pages/FundTransferPage';
 import TransactionHistoryPage from '@/pages/TransactionHistoryPage';
@@ -22,7 +26,7 @@ import AdminUserManagement from '@/pages/AdminUserManagement';
 import AdminAccountManagement from '@/pages/AdminAccountManagement';
 import AdminSystemMonitoring from '@/pages/AdminSystemMonitoring';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
 
 function App() {
   return (
@@ -32,13 +36,18 @@ function App() {
           <Toaster richColors position='top-right' />
           <BrowserRouter>
             <Routes>
-              <Route path='/' element={<Index />} />
-              <Route path='/auth' element={<AuthPage />} />
-              <Route path='/forget-password' element={<ForgotPasswordPage />} />
-              <Route
-                path='/reset-password/:token'
-                element={<ResetPasswordPage />}
-              />
+              <Route element={<RedirectIfAuthenticated />}>
+                <Route path='/' element={<Index />} />
+                <Route path='/auth' element={<AuthPage />} />
+                <Route
+                  path='/forget-password'
+                  element={<ForgotPasswordPage />}
+                />
+                <Route
+                  path='/reset-password/:token'
+                  element={<ResetPasswordPage />}
+                />
+              </Route>
               <Route element={<ProtectedRoute />}>
                 <Route path='/dashboard' element={<DashboardPage />} />
                 <Route
