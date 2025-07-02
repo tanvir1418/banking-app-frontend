@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -7,34 +7,14 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(
-      'Index page - isAuthenticated:',
-      isAuthenticated,
-      'isLoading:',
-      isLoading,
-      'isAdmin:',
-      isAdmin,
-      'userRole:',
-      userRole
-    );
-
     if (!isLoading) {
       if (isAuthenticated) {
-        console.log(
-          'User is authenticated, role:',
-          userRole,
-          'isAdmin:',
-          isAdmin
-        );
         if (isAdmin) {
-          console.log('Redirecting to admin dashboard');
           navigate('/admin', { replace: true });
         } else {
-          console.log('Redirecting to user dashboard');
           navigate('/dashboard', { replace: true });
         }
       } else {
-        console.log('No isAuthenticated, redirecting to auth');
         navigate('/auth', { replace: true });
       }
     }
