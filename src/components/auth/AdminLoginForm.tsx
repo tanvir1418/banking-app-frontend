@@ -20,9 +20,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Eye, EyeOff, Shield, User, Lock } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { api } from '@/lib/api';
+import { AuthResponse } from '@/types/auth';
+import { toast } from 'sonner';
 
 const adminLoginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -38,9 +40,8 @@ interface AdminLoginFormProps {
 const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onSwitchToUser }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
   const navigate = useNavigate();
-  const { login, userRole } = useAuth();
+  const { setToken, setUser, setUserRole } = useAuth();
 
   const form = useForm<z.infer<typeof adminLoginSchema>>({
     resolver: zodResolver(adminLoginSchema),
@@ -53,34 +54,33 @@ const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onSwitchToUser }) => {
   const onSubmit = async (values: z.infer<typeof adminLoginSchema>) => {
     setLoading(true);
     try {
-      await login({
+      const res = await api.post<AuthResponse>('/public/login', {
         email: values.email,
         password: values.password,
       });
 
-      // if (userRole === 'admin') {
-      toast({
-        title: 'Admin Login Successful',
-        description: 'Welcome to the admin dashboard!',
-      });
-      navigate('/admin', { replace: true });
-      // } else {
-      //   toast({
-      //     title: 'Access Denied',
-      //     description: 'You are not an administrator.',
-      //     variant: 'destructive',
-      //   });
-      // }
+      localStorage.setItem('token', res.data.token);
+      setToken(res.data.token);
+      setUser(res.data.user);
+      setUserRole(res.data.user.role);
 
+      if (res.data.user.role === 'admin') {
+        toast.success('Admin Login Successful', {
+          description: 'Welcome to the admin dashboard!',
+        });
+        navigate('/admin', { replace: true });
+      } else {
+        toast.error('Access Denied', {
+          description: 'You are not an administrator.',
+        });
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast({
-        title: 'Admin Login Failed',
+      toast.error('Admin Login Failed', {
         description:
           error?.response?.data?.message ||
           error.message ||
           'Invalid credentials',
-        variant: 'destructive',
       });
     } finally {
       setLoading(false);

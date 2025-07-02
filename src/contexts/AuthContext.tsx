@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import { AuthResponse, LoginInput, RegisterInput } from '@/types/auth';
+import { AuthResponse } from '@/types/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -9,9 +9,10 @@ interface AuthContextType {
   isAdmin: boolean;
   token: string | null;
   isLoading: boolean;
-  login: (data: LoginInput) => Promise<void>;
-  register: (data: RegisterInput) => Promise<void>;
   logout: () => void;
+  setToken: (token: string) => void;
+  setUser: (user: AuthResponse['user']) => void;
+  setUserRole: (role: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -51,33 +52,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     fetchUser();
   }, [token]);
 
-  const login = async ({ email, password }: LoginInput) => {
-    const res = await api.post<AuthResponse>('/public/login', {
-      email,
-      password,
-    });
-    localStorage.setItem('token', res.data.token);
-    setToken(res.data.token);
-    setUser(res.data.user);
-    setUserRole(res.data.user.role);
-  };
-
-  const register = async ({
-    email,
-    password,
-    confirmPassword,
-  }: RegisterInput) => {
-    const res = await api.post<AuthResponse>('/public/register', {
-      email,
-      password,
-      confirmPassword,
-    });
-    localStorage.setItem('token', res.data.token);
-    setToken(res.data.token);
-    setUser(res.data.user);
-    setUserRole(res.data.user.role);
-  };
-
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);
@@ -93,10 +67,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isAdmin,
         token,
         isAuthenticated,
-        login,
-        register,
-        logout,
         isLoading,
+        logout,
+        setToken,
+        setUser,
+        setUserRole,
       }}
     >
       {children}

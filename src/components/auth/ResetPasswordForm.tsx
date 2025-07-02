@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -19,72 +20,55 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { AuthResponse } from '@/types/auth';
+import { Eye, EyeOff, Lock } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 
-const registrationSchema = z
+const resetPasswordSchema = z
   .object({
-    email: z.string().email({ message: 'Invalid email address.' }),
     password: z
       .string()
-      .min(6, { message: 'Password must be at least 6 characters.' }),
-    confirmPassword: z.string().min(6),
+      .min(6, { message: 'Password must be at least 6 characters long.' }),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
-    message: "Passwords don't match",
+    message: "Passwords don't match.",
   });
 
-interface RegistrationFormProps {
-  onSwitchToLogin: () => void;
-}
-
-const RegistrationForm: React.FC<RegistrationFormProps> = ({
-  onSwitchToLogin,
-}) => {
+const ResetPasswordForm: React.FC = () => {
+  const { token } = useParams();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { setToken, setUser, setUserRole } = useAuth();
 
-  const form = useForm<z.infer<typeof registrationSchema>>({
-    resolver: zodResolver(registrationSchema),
+  const form = useForm<z.infer<typeof resetPasswordSchema>>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: '',
       password: '',
       confirmPassword: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof registrationSchema>) => {
+  const onSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
     setLoading(true);
     try {
-      const res = await api.post<AuthResponse>('/public/register', {
-        email: values.email,
+      await api.post(`/public/reset-password/${token}`, {
         password: values.password,
         confirmPassword: values.confirmPassword,
       });
-
-      localStorage.setItem('token', res.data.token);
-      setToken(res.data.token);
-      setUser(res.data.user);
-      setUserRole(res.data.user.role);
-
-      toast.success('Registration Successful', {
-        description: 'You can now log in to your account.',
+      toast.success('Password Reset Successful', {
+        description: 'You can now log in with your new password.',
       });
-
-      onSwitchToLogin();
+      navigate('/auth');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error('Registration Failed', {
+      toast.error('Reset Failed', {
         description:
           error?.response?.data?.message ||
           error.message ||
-          'An unexpected error occurred.',
+          'An error occurred during password reset.',
       });
     } finally {
       setLoading(false);
@@ -94,32 +78,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
   return (
     <Card className='w-full max-w-md bg-card text-card-foreground shadow-xl dark:shadow-2xl rounded-lg'>
       <CardHeader className='text-center'>
-        <CardTitle className='text-2xl font-bold'>Create Account</CardTitle>
+        <CardTitle className='text-2xl font-bold'>Reset Password</CardTitle>
         <CardDescription className='text-muted-foreground'>
-          Join us by creating your account
+          Enter a new password to reset your account
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            {/* Email */}
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className='text-muted-foreground'>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Enter your email'
-                      {...field}
-                      className='bg-background text-card-foreground placeholder:text-muted-foreground'
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             {/* Password */}
             <FormField
               control={form.control}
@@ -127,16 +93,17 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-muted-foreground'>
-                    Password
+                    New Password
                   </FormLabel>
                   <FormControl>
                     <div className='relative'>
                       <Input
                         type={showPassword ? 'text' : 'password'}
-                        placeholder='Enter your password'
+                        placeholder='Enter new password'
                         {...field}
-                        className='bg-background text-card-foreground placeholder:text-muted-foreground'
+                        className='bg-background text-card-foreground placeholder:text-muted-foreground pl-10'
                       />
+                      <Lock className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
                       <Button
                         type='button'
                         variant='ghost'
@@ -156,6 +123,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 </FormItem>
               )}
             />
+
             {/* Confirm Password */}
             <FormField
               control={form.control}
@@ -163,16 +131,17 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-muted-foreground'>
-                    Confirm Password
+                    Confirm New Password
                   </FormLabel>
                   <FormControl>
                     <div className='relative'>
                       <Input
                         type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder='Confirm your password'
+                        placeholder='Confirm new password'
                         {...field}
-                        className='bg-background text-card-foreground placeholder:text-muted-foreground'
+                        className='bg-background text-card-foreground placeholder:text-muted-foreground pl-10'
                       />
+                      <Lock className='absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground' />
                       <Button
                         type='button'
                         variant='ghost'
@@ -194,32 +163,19 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 </FormItem>
               )}
             />
-            {/* Submit */}
+
             <Button
               type='submit'
               className='w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600'
               disabled={loading}
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? 'Resetting...' : 'Reset Password'}
             </Button>
           </form>
         </Form>
-
-        {/* Switch to login */}
-        <p className='mt-6 text-center text-sm text-muted-foreground'>
-          Already have an account?{' '}
-          <Button
-            variant='link'
-            className='p-0 h-auto text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
-            onClick={onSwitchToLogin}
-            disabled={loading}
-          >
-            Sign In
-          </Button>
-        </p>
       </CardContent>
     </Card>
   );
 };
 
-export default RegistrationForm;
+export default ResetPasswordForm;

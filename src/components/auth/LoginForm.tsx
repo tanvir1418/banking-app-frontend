@@ -29,9 +29,11 @@ import {
   User,
   Lock,
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { AuthResponse } from '@/types/auth';
+import { api } from '@/lib/api';
+import { toast } from 'sonner';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -48,9 +50,8 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
-  const { login } = useAuth();
   const navigate = useNavigate();
+  const { setToken, setUser, setUserRole } = useAuth();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -64,25 +65,28 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setLoading(true);
     try {
-      await login({
+      const res = await api.post<AuthResponse>('/public/login', {
         email: values.email,
         password: values.password,
       });
-      toast({
-        title: 'Login Successful',
+
+      localStorage.setItem('token', res.data.token);
+      setToken(res.data.token);
+      setUser(res.data.user);
+      setUserRole(res.data.user.role);
+
+      toast.success('Login Successful', {
         description: 'Welcome back!',
       });
-      navigate('/dashboard');
 
+      navigate('/dashboard');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast({
-        title: 'Login Failed',
+      toast.error('Login Failed', {
         description:
           error?.response?.data?.message ||
           error.message ||
           'Invalid credentials',
-        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -135,7 +139,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
                       type='button'
                       className='p-0 h-auto text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
                     >
-                      Forgot password?
+                      <Link to='/forget-password'>Forgot password?</Link>
                     </Button>
                   </div>
                   <FormControl>
